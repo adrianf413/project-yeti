@@ -1,4 +1,4 @@
-#This is a basic script to get used to usign praw
+#This is meant to be the more advanced scipt in using PRAW
 
 import praw
 
