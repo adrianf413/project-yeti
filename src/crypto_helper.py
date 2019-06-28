@@ -3,18 +3,11 @@ import json
 import datetime
 import pandas as pd
 
-print("Getting crypto currency data now")
-
-# creating an instance of the coin gecko API to get retrieve coin data
 cg = CoinGeckoAPI()
 
 
-# Class to get the percentage differences using the coinGecko API
-#class CoinData():
-
-    # Constructor method
-#    def __init__(self):
-#        cg = CoinGeckoAPI()
+def say_hi():
+    print("Hello world- this file was imported properly")
 
 # Method to get the current price of the coin
 def get_price(coin_id, currency):

@@ -1,11 +1,18 @@
-from cryptocurrency_data import CoinData
+"""
+This is the applications main class, 
+which will be used to call the reddit and
+coin gecko classes.
+
+"""
+
 import json
 import datetime
 import pandas as pd
+import crypto_helper as ch 
+
+ch.say_hi()
 
 print("Getting crypto currency data now")
-
-
 
 # getting the exact current date and time to retrieve the momentary crypto data
 today_date = datetime.datetime.now()
@@ -34,9 +41,12 @@ def main():
     day_time_diff = datetime.timedelta(days = 1)
     month_time_diff = datetime.timedelta(days = 30)
 
+    # Make an instance of CoinData class
+    #cd = CoinData()
+
     # Loop to get the data for each coin in the list
     for x in coin_id_list:
-        prices.append(cg.get_price(x, 'eur'))
+        prices.append(ch.get_prices(x, 'eur'))
 
         date = today_date - day_time_diff
         f = date.strftime('%d-%m-%Y')
