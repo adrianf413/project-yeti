@@ -5,18 +5,17 @@ import pandas as pd
 
 cg = CoinGeckoAPI()
 
-
-def say_hi():
-    print("Hello world- this file was imported properly")
-
 # Method to get the current price of the coin
-def get_price(coin_id, currency):
+def get_prices(coin_id, currency):
     return cg.get_price(coin_id, currency)
 
 # Method to get the percentage difference for a certain coin based on a particular
 # date relative to the current date and time
 def get_percentage_difference_by_time(id, currency, date):
 
+    print(id)
+    print(currency)
+    print(date)
     current = cg.get_price(id, currency)
     old = cg.get_coin_history_by_id(id, date)
     current_euro = current[id][currency]
