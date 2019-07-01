@@ -3,6 +3,16 @@ import datetime
 import time
 import json
 
+def get_time_deltas():
+    current_time = datetime.datetime.now()
+    x = current_time.strftime('%Y-%m-%d %H:%M:%S')
+    one_minute_ago = current_time - datetime.timedelta(minutes = 1)
+    ten_minutes_ago = current_time - datetime.timedelta(minutes = 10)
+    thirty_minutes_ago = current_time - datetime.timedelta(minutes = 30)
+    hour_ago = current_time - datetime.timedelta(hours = 1)
+    six_hours_ago = current_time - datetime.timedelta(hours = 6)
+    twelve_hours_ago = current_time - datetime.timedelta(hours = 12)
+
 def main():
     # main method
     cg = CoinGeckoAPI()
