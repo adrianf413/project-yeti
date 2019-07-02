@@ -1,10 +1,10 @@
 '''
-# This is meant to be the more advanced scipt in using PRAW
-# It does the same as sean_script.py and also...
-# if hot thread isn't above 50 upvotes, don't print it
-# gets rid of 'replace_more' comments
-# get a flattened sit of comments
-# make a file called comments.txt
+This is meant to be the more advanced scipt in using PRAW
+It does the same as sean_script.py and also...
+if hot thread isn't above 50 upvotes, don't print it
+gets rid of 'replace_more' comments
+get a flattened sit of comments
+make a file called comments.txt
 '''
 import praw
 import json

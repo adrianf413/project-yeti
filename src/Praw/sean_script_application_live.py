@@ -1,4 +1,7 @@
-# This script
+'''
+This script is meant to take live comments from the
+CryptoCurrency subreddit as they come through
+'''
 
 import praw
 import json
@@ -13,7 +16,7 @@ reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
 
 crypto_subreddit = reddit.subreddit('CryptoCurrency')  # this is the subreddit
 
-hot_crypto = crypto_subreddit.hot(limit=5)  # this is the retrieves a categroy of that subreddit
+hot_crypto = crypto_subreddit.hot(limit=3)  # this is the retrieves a categroy of that subreddit
 
 
 # this for loop streams comments from reddit as they come in

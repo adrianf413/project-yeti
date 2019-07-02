@@ -1,8 +1,10 @@
-# This is a basic script to get used to usign praw,
-# It retrieves the top/hot 3 threads on the r/CryptoCurrency subreddit
-# and it prints out these top 3 threads/submission titles
-# with their number of upvotes
-# NB: it ignroes the 'sticked' threads on the subreddit
+'''
+This is a basic script to get used to usign praw,
+It retrieves the top/hot 3 threads on the r/CryptoCurrency subreddit
+and it prints out these top 3 threads/submission titles
+with their number of upvotes
+NB: it ignroes the 'sticked' threads on the subreddit
+'''
 
 import praw
 
