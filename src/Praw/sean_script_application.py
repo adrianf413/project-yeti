@@ -36,9 +36,11 @@ reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
                      password='1508sh1998Red',
                      user_agent='CCPB v1.0')
 
-crypto_subreddit = reddit.subreddit('CryptoCurrency')  # this is the subreddit
+# Retrive subreddit r/CryptoCurrency
+crypto_subreddit = reddit.subreddit('CryptoCurrency')
 
-hot_crypto = crypto_subreddit.hot(limit=3)  # this retrieves a categroy of that subreddit
+# this retrieves the hot categroy of that subreddit
+hot_crypto = crypto_subreddit.hot(limit=3)
 
 for submission in hot_crypto:  # submissions are the subreddit threads, they are an object
     if not submission.stickied and submission.ups > 50:  # only take submission if it is not stickied and has > 50 votes
