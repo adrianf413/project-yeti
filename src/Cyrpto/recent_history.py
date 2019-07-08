@@ -75,10 +75,15 @@ def main():
             #print(simple_price)
             coin_objects.append(Coin(i, price[i]['eur']))
 
+    history_dict = {}
+    print(len(coin_objects))
     for j in coin_objects:
         coin_storage.write(json.dumps({j.id:{j.timestamp:j.price}}))
-        coin_storage.write(str(coin_objects.index(j)))
+        #print(  {j.id:{j.timestamp:j.price}} )
+        history_dict.update( {j.id:{j.timestamp : j.price }} )
         coin_storage.write('\n')
+
+    coin_storage.write(json.dumps(history_dict))
 
 if __name__ == '__main__':
     main()

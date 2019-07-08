@@ -15,7 +15,4 @@ class Coin:
         self.id = id
         self.price = price
         current_time = datetime.datetime.now()
-        self.timestamp = current_time.strftime('%Y-%m-%d %H:%M:%S')
-
-    
-    
+        self.timestamp = current_time.strftime('%H:%M')
