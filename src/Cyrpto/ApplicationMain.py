@@ -8,12 +8,27 @@ coin gecko classes.
 import json
 import datetime
 import pandas as pd
-import crypto_helper as ch 
+import crypto_helper as ch
+import time
+from os import system, name
+from coin import Coin
 
 print("Getting crypto currency data now")
 
 # getting the exact current date and time to retrieve the momentary crypto data
 today_date = datetime.datetime.now()
+
+# define our clear function 
+def clear(): 
+
+	# for windows 
+	if name == 'nt': 
+		_ = system('cls') 
+
+	# for mac and linux(here, os.name is 'posix') 
+	else: 
+		_ = system('clear') 
+
 
 def main():
 
@@ -33,6 +48,7 @@ def main():
     week_percent_list = []
     day_percent_list = []
     prices = []
+    coin_objects = []
 
     # Time deltas for each coin
     week_time_diff = datetime.timedelta(days = 7)
@@ -42,14 +58,26 @@ def main():
     # Make an instance of CoinData class
     #cd = CoinData()
 
+    for x in coin_id_list:
+        price = ch.get_prices(x, 'eur')
+        coin_objects.append(Coin(x, price[x]['eur']))
+
+    for i in coin_objects:
+        print(i.id)
+        print(i.price)
+        print(i.timestamp)
+        print('\n')
+
     # Loop to get the data for each coin in the list
     for x in coin_id_list:
+        
         prices.append(ch.get_prices(x, 'eur'))
 
         date = today_date - day_time_diff
         f = date.strftime('%d-%m-%Y')
         def_test = ch.get_percentage_difference_by_time(id=x, currency='eur', date=f)
         day_percent_list.append({x:def_test})
+        #print({x:def_test})
 
         date = today_date - week_time_diff
         f = date.strftime('%d-%m-%Y')
@@ -60,7 +88,7 @@ def main():
         f = date.strftime('%d-%m-%Y')
         def_test = ch.get_percentage_difference_by_time(id=x, currency='eur', date=f)
         month_percent_list.append({x:def_test})
-
+        
     # Writing the current prices of all the coins
     percentage_storage.write("\nCurrent Prices: Euro\n")
     for j in prices:
@@ -79,7 +107,7 @@ def main():
             key_val = key
         for val in z.values():
             val_val = val
-        print(val_val)
+        #print(val_val)
         output[key_val] = 5
         #counter = counter + 1
         #output.insert(counter, key_val, val_val)
@@ -104,8 +132,8 @@ def main():
         #percentage_storage.write(z)
         percentage_storage.write("\n")
 
-    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-        print(output)
+    #]with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+        #print(output)
     #percentage_storage.write(str(output.head()))
 
 if __name__ == '__main__':
