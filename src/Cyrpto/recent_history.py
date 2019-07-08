@@ -65,10 +65,20 @@ def main():
     current_time = datetime.datetime.now()
 
     for i in coin_list_ids:
-        x = current_time.strftime('%Y-%m-%d %H:%M:%S')
+        z = current_time.strftime('%H:%M:%S')
+        #print(z)
         #print(x)
-        current = cg.get_price(i, 'eur')
-        coin_objects.append(Coin(x, price[x]['eur']))
+        price = cg.get_price(i, 'eur')
+        #print(price)
+        for x in range(0, 1440):
+            #simple_price = price[i]['eur']
+            #print(simple_price)
+            coin_objects.append(Coin(i, price[i]['eur']))
+
+    for j in coin_objects:
+        coin_storage.write(json.dumps({j.id:{j.timestamp:j.price}}))
+        coin_storage.write(str(coin_objects.index(j)))
+        coin_storage.write('\n')
 
 if __name__ == '__main__':
     main()
