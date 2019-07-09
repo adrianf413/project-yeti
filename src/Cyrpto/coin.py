@@ -11,8 +11,9 @@ import json
 
 
 class Coin:
-    def __init__(self, id, price):
+    def __init__(self, id, price, timestamp):
         self.id = id
         self.price = price
         current_time = datetime.datetime.now()
-        self.timestamp = current_time.strftime('%H:%M')
+        self.timestamp = timestamp.strftime('%H:%M')
+        #self.timestamp = current_time.strftime('%H:%M')

@@ -21,6 +21,12 @@ def get_time_deltas():
     #print(six_hours_ago.strftime('%Y-%m-%d %H:%M:%S'))
     #print(twelve_hours_ago.strftime('%Y-%m-%d %H:%M:%S'))
 
+def update_recent_prices():
+    for i in coin_objects:
+        if i.timestamp == '21:00':
+            i.price = 0
+            break
+
 def get_last_twelve_hours_prices(coin_list):
     # main method
     print("getting last minutes data for all coins")
@@ -63,7 +69,7 @@ def main():
                     'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
                     'dogecoin']
     current_time = datetime.datetime.now()
-
+    counter = 1
     for i in coin_list_ids:
         z = current_time.strftime('%H:%M:%S')
         #print(z)
@@ -73,17 +79,34 @@ def main():
         for x in range(0, 1440):
             #simple_price = price[i]['eur']
             #print(simple_price)
-            coin_objects.append(Coin(i, price[i]['eur']))
+            one_minute_ago = current_time - datetime.timedelta(minutes = counter)
+            coin_objects.append(Coin(i, price[i]['eur'], one_minute_ago))
+            counter = counter + 1
 
     history_dict = {}
     print(len(coin_objects))
+    counter = 1
+    #coin_storage.write(str(coin_objects))
     for j in coin_objects:
-        coin_storage.write(json.dumps({j.id:{j.timestamp:j.price}}))
+        #coin_storage.write(json.dumps({j.id:{j.timestamp:j.price}}))
         #print(  {j.id:{j.timestamp:j.price}} )
-        history_dict.update( {j.id:{j.timestamp : j.price }} )
-        coin_storage.write('\n')
+        current_time_two = datetime.datetime.now()
+        right_now = current_time_two.strftime('%Y-%m-%d %H:%M:%S')
+        one_minute_ago = current_time_two - datetime.timedelta(minutes = counter)
+        #key_val = 
+        #history_dict.update( {j.id:{j.timestamp - datetime.timedelta(minutes = counter) : j.price }} )
+        history_dict.update( {j.id:{str(one_minute_ago) : j.price }} )
+        #coin_storage.write('\n')
+        counter = counter + 1
+        #coin_storage.write(j.id + ' ' + str(j.price) + ' ' + str(j.timestamp) + '\n')
 
-    coin_storage.write(json.dumps(history_dict))
+    #sought = next((z for z in coin_objects if z.timestamp == '21:00'), None)
+    #print(sought.id + ' ' + str(sought.price))
+    
+    
+    for l in coin_objects:
+        coin_storage.write(l.id + ' ' + str(l.price) + ' ' + str(l.timestamp) + '\n')
+    #coin_storage.write(json.dumps(history_dict))
 
 if __name__ == '__main__':
     main()
