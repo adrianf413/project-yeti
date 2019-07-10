@@ -1,6 +1,7 @@
 '''
-This is the script for finding, storuing and overwriting 
-coin data for the previous 24 hours
+This is the script for finding and storuing 
+coin data for the previous 24 hours upon 
+initial start up.
 '''
 
 from pycoingecko import CoinGeckoAPI
