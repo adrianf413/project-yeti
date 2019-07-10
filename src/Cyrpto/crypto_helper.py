@@ -13,9 +13,9 @@ def get_prices(coin_id, currency):
 # date relative to the current date and time
 def get_percentage_difference_by_time(id, currency, date):
 
-    print(id)
-    print(currency)
-    print(date)
+    #print(id)
+    #print(currency)
+    #print(date)
     current = cg.get_price(id, currency)
     old = cg.get_coin_history_by_id(id, date)
     current_euro = current[id][currency]
