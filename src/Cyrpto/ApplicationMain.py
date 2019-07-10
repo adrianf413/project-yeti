@@ -18,17 +18,6 @@ print("Getting crypto currency data now")
 # getting the exact current date and time to retrieve the momentary crypto data
 today_date = datetime.datetime.now()
 
-# define our clear function 
-def clear(): 
-
-	# for windows 
-	if name == 'nt': 
-		_ = system('cls') 
-
-	# for mac and linux(here, os.name is 'posix') 
-	else: 
-		_ = system('clear') 
-
 
 def main():
 
@@ -77,7 +66,6 @@ def main():
         f = date.strftime('%d-%m-%Y')
         def_test = ch.get_percentage_difference_by_time(id=x, currency='eur', date=f)
         day_percent_list.append({x:def_test})
-        #print({x:def_test})
 
         date = today_date - week_time_diff
         f = date.strftime('%d-%m-%Y')
