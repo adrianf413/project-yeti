@@ -9,6 +9,11 @@ coin gecko classes.
 
 def main():
 
+    # List of IDs for the 13 coind that we are starting with 
+    coin_id_list = ['bitcoin', 'bitcoin-cash', 'ethereum', 'litecoin', 'ripple', 'eos',
+                    'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
+                    'dogecoin']
+                    
     # initialise the coin data for the previous 24 hours
 
 while True:
