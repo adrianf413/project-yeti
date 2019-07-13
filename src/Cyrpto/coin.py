@@ -11,10 +11,10 @@ import json
 
 
 class Coin:
-    def __init__(self, id, price):
+    def __init__(self, id):
         # Creating the attributes of interest for the coins
         self.id = id
-        self.price = price
+        self.price = 0
         self.timestamp = 0
         self.minute_percentage = 0
         self.ten_minute_percentage = 0

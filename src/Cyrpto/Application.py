@@ -4,6 +4,11 @@ which will be used to call the reddit and
 coin gecko classes.
 
 """
+from coin import Coin
+import CoinGecko
+import time
+import datetime
+
 # This is a skeleton class that will be populated once all the parts
 # of the project are working
 
@@ -13,7 +18,12 @@ def main():
     coin_id_list = ['bitcoin', 'bitcoin-cash', 'ethereum', 'litecoin', 'ripple', 'eos',
                     'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
                     'dogecoin']
-                    
+    
+    # Initialising the list of Coin objects.
+    coin_object_list = []
+    for i in coin_id_list:
+        coin_object_list.append(Coin(i))
+
     # initialise the coin data for the previous 24 hours
 
 while True:
