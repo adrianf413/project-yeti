@@ -10,24 +10,42 @@ import time
 import json
 from coin import Coin
 
-# This function will be used by the analytics class later
-# This is just experimentation for now
-def get_time_deltas():
-    current_time = datetime.datetime.now()
-    x = current_time.strftime('%Y-%m-%d %H:%M:%S')
-    one_minute_ago = current_time - datetime.timedelta(minutes = 1)
-    ten_minutes_ago = current_time - datetime.timedelta(minutes = 10)
-    thirty_minutes_ago = current_time - datetime.timedelta(minutes = 30)
-    hour_ago = current_time - datetime.timedelta(hours = 1)
-    six_hours_ago = current_time - datetime.timedelta(hours = 6)
-    twelve_hours_ago = current_time - datetime.timedelta(hours = 12)
-    #print(one_minute_ago.strftime('%Y-%m-%d %H:%M:%S'))
-    #print(ten_minutes_ago.strftime('%Y-%m-%d %H:%M:%S'))
-    #print(thirty_minutes_ago.strftime('%Y-%m-%d %H:%M:%S'))
-    #print(hour_ago.strftime('%Y-%m-%d %H:%M:%S'))
-    #print(six_hours_ago.strftime('%Y-%m-%d %H:%M:%S'))
-    #print(twelve_hours_ago.strftime('%Y-%m-%d %H:%M:%S'))
 
+def get_one_minute_percentage():
+    current_time = datetime.datetime.now()
+    one_minute_ago = current_time - datetime.timedelta(minutes = 1)
+
+def get_ten_minute_percentage():
+    current_time = datetime.datetime.now()
+    ten_minutes_ago = current_time - datetime.timedelta(minutes = 10)
+
+def get_thirty_minute_percentage():
+    current_time = datetime.datetime.now()
+    thirty_minutes_ago = current_time - datetime.timedelta(minutes = 30)
+
+def get_one_hour_percentage():
+    current_time = datetime.datetime.now()
+    one_hour_ago = current_time - datetime.timedelta(hours = 1)
+
+def get_six_hour_percentage():
+    current_time = datetime.datetime.now()
+    six_hours_ago = current_time - datetime.timedelta(hours = 6)
+
+def get_twelve_hour_percentage():
+    current_time = datetime.datetime.now()
+    twelve_hours_ago = current_time - datetime.timedelta(hours = 12)
+
+def get_one_day_percentage():
+    current_time = datetime.datetime.now()
+    one_day_ago = current_time - datetime.timedelta(days = 1)
+
+def get_one_week_percentage():
+    current_time = datetime.datetime.now()
+    one_week_ago = current_time - datetime.timedelta(days = 7)
+
+def get_one_month_percentage():
+    current_time = datetime.datetime.now()
+    one_month_ago = current_time - datetime.timedelta(days = 28)
 
 # WORK IN PROGRESS
 # This method will find the price for a specific time 24

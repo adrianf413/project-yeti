@@ -5,12 +5,15 @@ coin gecko classes.
 
 """
 from coin import Coin
-import CoinGecko
+from pycoingecko import CoinGeckoAPI
 import time
 import datetime
 
 # This is a skeleton class that will be populated once all the parts
 # of the project are working
+
+# creating an instance of the coin gecko API to get retrieve coin data
+cg = CoinGeckoAPI()
 
 def main():
 
@@ -22,14 +25,17 @@ def main():
     # Initialising the list of Coin objects.
     coin_object_list = []
     for i in coin_id_list:
-        coin_object_list.append(Coin(i))
+        coin_object_list.append(Coin(i, cg.get_price(i, 'eur')))
 
+    for j in coin_object_list:
+        print(j.id)
+        print(j.price)
     # initialise the coin data for the previous 24 hours
 
 while True:
-
+    print("Enterred infinite loop")
 	# monitor the input from the coin analytics
-	
+    break
     
     # monitor the input from the reddit analytics
 
