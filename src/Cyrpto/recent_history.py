@@ -10,42 +10,58 @@ import time
 import json
 from coin import Coin
 
+cg = CoinGeckoAPI()
 
-def get_one_minute_percentage():
+# Method to populate the current price attribute of the coin objects
+def get_current_price(id):
+    current_price = cg.get_price(id, 'eur')
+    return current_price[id]['eur']
+
+# Methods to get the percentage differences for each time period
+def get_one_minute_percentage(id, current):
     current_time = datetime.datetime.now()
     one_minute_ago = current_time - datetime.timedelta(minutes = 1)
+    key_value = one_minute_ago.strftime('%H:%M')
 
-def get_ten_minute_percentage():
+def get_ten_minute_percentage(id, current):
     current_time = datetime.datetime.now()
     ten_minutes_ago = current_time - datetime.timedelta(minutes = 10)
+    key_value = one_minute_ago.strftime('%H:%M')
 
-def get_thirty_minute_percentage():
+def get_thirty_minute_percentage(id, current):
     current_time = datetime.datetime.now()
     thirty_minutes_ago = current_time - datetime.timedelta(minutes = 30)
+    key_value = one_minute_ago.strftime('%H:%M')
 
-def get_one_hour_percentage():
+def get_one_hour_percentage(id, current):
     current_time = datetime.datetime.now()
     one_hour_ago = current_time - datetime.timedelta(hours = 1)
+    key_value = one_minute_ago.strftime('%H:%M')
 
-def get_six_hour_percentage():
+def get_six_hour_percentage(id, current):
     current_time = datetime.datetime.now()
     six_hours_ago = current_time - datetime.timedelta(hours = 6)
+    key_value = one_minute_ago.strftime('%H:%M')
 
-def get_twelve_hour_percentage():
+def get_twelve_hour_percentage(id, current):
     current_time = datetime.datetime.now()
     twelve_hours_ago = current_time - datetime.timedelta(hours = 12)
+    key_value = one_minute_ago.strftime('%H:%M')
 
-def get_one_day_percentage():
+def get_one_day_percentage(id, current):
     current_time = datetime.datetime.now()
     one_day_ago = current_time - datetime.timedelta(days = 1)
+    key_value = one_minute_ago.strftime('%d-%m-%Y')
 
-def get_one_week_percentage():
+def get_one_week_percentage(id, current):
     current_time = datetime.datetime.now()
     one_week_ago = current_time - datetime.timedelta(days = 7)
+    key_value = one_minute_ago.strftime('%d-%m-%Y')
 
-def get_one_month_percentage():
+def get_one_month_percentage(id, current):
     current_time = datetime.datetime.now()
     one_month_ago = current_time - datetime.timedelta(days = 28)
+    key_value = one_minute_ago.strftime('%d-%m-%Y')
 
 # WORK IN PROGRESS
 # This method will find the price for a specific time 24
@@ -62,7 +78,7 @@ def update_recent_prices(coin_objects):
 # I need from it
 def get_last_twelve_hours_prices(coin_list):
     print("getting last minutes data for all coins")
-    cg = CoinGeckoAPI()
+    
     coin_history = []
     coin_storage = open("coins.txt", 'w+')
     counter = 0

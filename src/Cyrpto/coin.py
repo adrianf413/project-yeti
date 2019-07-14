@@ -18,7 +18,7 @@ class Coin:
         self.timestamp = 0
         self.one_minute_percentage = 0
         self.ten_minute_percentage = 0
-        self.thirty_percentage = 0
+        self.thirty_minute_percentage = 0
         self.one_hour_percentage = 0
         self.six_hour_percentage = 0
         self.twelve_hour_percentage = 0
