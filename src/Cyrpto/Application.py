@@ -8,6 +8,7 @@ from coin import Coin
 from pycoingecko import CoinGeckoAPI
 import time
 import datetime
+import logging
 import recent_history as rh
 
 # This is a skeleton class that will be populated once all the parts
