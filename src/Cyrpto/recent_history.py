@@ -11,6 +11,9 @@ import json
 from coin import Coin
 
 cg = CoinGeckoAPI()
+# List used to store objects that will hold the prices
+# For the last 24 hours. 
+coin_history_objects =[]
 
 # Method to populate the current price attribute of the coin objects
 def get_current_price(id):
@@ -22,56 +25,83 @@ def get_one_minute_percentage(id, current):
     current_time = datetime.datetime.now()
     one_minute_ago = current_time - datetime.timedelta(minutes = 1)
     key_value = one_minute_ago.strftime('%H:%M')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 def get_ten_minute_percentage(id, current):
     current_time = datetime.datetime.now()
     ten_minutes_ago = current_time - datetime.timedelta(minutes = 10)
     key_value = one_minute_ago.strftime('%H:%M')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 def get_thirty_minute_percentage(id, current):
     current_time = datetime.datetime.now()
     thirty_minutes_ago = current_time - datetime.timedelta(minutes = 30)
     key_value = one_minute_ago.strftime('%H:%M')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 def get_one_hour_percentage(id, current):
     current_time = datetime.datetime.now()
     one_hour_ago = current_time - datetime.timedelta(hours = 1)
     key_value = one_minute_ago.strftime('%H:%M')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 def get_six_hour_percentage(id, current):
     current_time = datetime.datetime.now()
     six_hours_ago = current_time - datetime.timedelta(hours = 6)
     key_value = one_minute_ago.strftime('%H:%M')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 def get_twelve_hour_percentage(id, current):
     current_time = datetime.datetime.now()
     twelve_hours_ago = current_time - datetime.timedelta(hours = 12)
     key_value = one_minute_ago.strftime('%H:%M')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 def get_one_day_percentage(id, current):
     current_time = datetime.datetime.now()
     one_day_ago = current_time - datetime.timedelta(days = 1)
     key_value = one_minute_ago.strftime('%d-%m-%Y')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 def get_one_week_percentage(id, current):
     current_time = datetime.datetime.now()
     one_week_ago = current_time - datetime.timedelta(days = 7)
     key_value = one_minute_ago.strftime('%d-%m-%Y')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 def get_one_month_percentage(id, current):
     current_time = datetime.datetime.now()
     one_month_ago = current_time - datetime.timedelta(days = 28)
     key_value = one_minute_ago.strftime('%d-%m-%Y')
+    for q in coin_history_objects:
+        if q.id == id and q.timestamp == key_value:
+            return q.price
 
 # WORK IN PROGRESS
 # This method will find the price for a specific time 24
 # hours ago, and replace it with the new price
-def update_recent_prices(coin_objects):
-    for i in coin_objects:
-        if i.timestamp == '21:00':
-            # 21:00 is a random time I used for testing
-            i.price = 0
-            break
+def update_recent_prices(time):
+    for i in coin_history_objects:
+        if i.timestamp == 'time:
+            # Rewriting old time with new time. 
+            i.price = cg.get_price(i.id, 'eur')
+            
 
 # THis is more than likely a dead/old function, 
 # No need to review, just keeping incase theres something in
