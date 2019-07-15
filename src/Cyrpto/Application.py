@@ -36,7 +36,10 @@ def main():
     # initialise the coin data for the previous 24 hours
     print("Initiating coins")
     rh.initiate_coin_history(coin_id_list)
-    return
+    print("One minute percentage difference is:")
+    for k in coin_object_list:
+        x = rh.get_one_minute_percentage(k.id, k.price)
+        print(x)
 
 while True:
     print("Enterred infinite loop")
