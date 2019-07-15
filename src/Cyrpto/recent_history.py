@@ -28,6 +28,7 @@ def get_one_minute_percentage(id, current_price):
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
             return (q.price/current_price) * 100
+            
 def get_ten_minute_percentage(id, current_price):
     current_time = datetime.datetime.now()
     ten_minutes_ago = current_time - datetime.timedelta(minutes = 10)
