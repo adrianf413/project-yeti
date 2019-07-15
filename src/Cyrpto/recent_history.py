@@ -21,77 +21,76 @@ def get_current_price(id):
     return current_price[id]['eur']
 
 # Methods to get the percentage differences for each time period
-def get_one_minute_percentage(id, current):
+def get_one_minute_percentage(id, current_price):
     current_time = datetime.datetime.now()
     one_minute_ago = current_time - datetime.timedelta(minutes = 1)
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
-
-def get_ten_minute_percentage(id, current):
+            return (q.price/current_price) * 100
+def get_ten_minute_percentage(id, current_price):
     current_time = datetime.datetime.now()
     ten_minutes_ago = current_time - datetime.timedelta(minutes = 10)
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
+            return (q.price/current_price) * 100
 
-def get_thirty_minute_percentage(id, current):
+def get_thirty_minute_percentage(id, current_price):
     current_time = datetime.datetime.now()
     thirty_minutes_ago = current_time - datetime.timedelta(minutes = 30)
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
+            return (q.price/current_price) * 100
 
-def get_one_hour_percentage(id, current):
+def get_one_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
     one_hour_ago = current_time - datetime.timedelta(hours = 1)
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
+            return (q.price/current_price) * 100
 
-def get_six_hour_percentage(id, current):
+def get_six_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
     six_hours_ago = current_time - datetime.timedelta(hours = 6)
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
+            return (q.price/current_price) * 100
 
-def get_twelve_hour_percentage(id, current):
+def get_twelve_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
     twelve_hours_ago = current_time - datetime.timedelta(hours = 12)
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
+            return (q.price/current_price) * 100
 
-def get_one_day_percentage(id, current):
+def get_one_day_percentage(id, current_price):
     current_time = datetime.datetime.now()
     one_day_ago = current_time - datetime.timedelta(days = 1)
     key_value = one_minute_ago.strftime('%d-%m-%Y')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
+            return (q.price/current_price) * 100
 
-def get_one_week_percentage(id, current):
+def get_one_week_percentage(id, current_price):
     current_time = datetime.datetime.now()
     one_week_ago = current_time - datetime.timedelta(days = 7)
     key_value = one_minute_ago.strftime('%d-%m-%Y')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
+            return (q.price/current_price) * 100
 
-def get_one_month_percentage(id, current):
+def get_one_month_percentage(id, current_price):
     current_time = datetime.datetime.now()
     one_month_ago = current_time - datetime.timedelta(days = 28)
     key_value = one_minute_ago.strftime('%d-%m-%Y')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return q.price
+            return (q.price/current_price) * 100
 
 # WORK IN PROGRESS
 # This method will find the price for a specific time 24
@@ -123,7 +122,7 @@ def get_last_twelve_hours_prices(coin_list):
                 x = current_time.strftime('%Y-%m-%d %H:%M:%S')
                 #print(x)
                 current = cg.get_price(i, 'eur')
-                #print(current)
+                #print(current_price)
                 print(x)
                 coin_history.append({x:current})
                 coin_storage.write(json.dumps({x:current}))
