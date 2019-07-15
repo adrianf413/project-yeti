@@ -8,6 +8,7 @@ from coin import Coin
 from pycoingecko import CoinGeckoAPI
 import time
 import datetime
+import recent_history as rh
 
 # This is a skeleton class that will be populated once all the parts
 # of the project are working
@@ -30,7 +31,11 @@ def main():
     for j in coin_object_list:
         print(j.id)
         print(j.price)
+
     # initialise the coin data for the previous 24 hours
+    print("Initiating coins")
+    rh.initiate_coin_history(coin_id_list)
+    return
 
 while True:
     print("Enterred infinite loop")

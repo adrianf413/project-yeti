@@ -13,7 +13,28 @@ from coin import Coin
 cg = CoinGeckoAPI()
 # List used to store objects that will hold the prices
 # For the last 24 hours. 
-coin_history_objects =[]
+coin_history_objects = []
+coin_storage = open("12hourstorage.txt", 'w+')
+
+def initiate_coin_history(coin_id_list):
+    # Getting and storing the price every minute for 24 hours
+    # As a test 
+    counter = 1
+    while counter < (4):
+        if datetime.datetime.now().second == 0:
+            for i in coin_id_list:
+                current_time = datetime.datetime.now()
+                time_value = current_time.strftime('%H:%M')
+                price = cg.get_price(i, 'eur')
+                temp_coin_object = Coin(i, price)
+                temp_coin_object.timestamp = time_value
+                # stoting list of Coin objects
+                coin_history_objects.append(temp_coin_object)
+            counter = counter + 1
+    print("Done writing 3 mintutes worth of data")
+    for l in coin_history_objects:
+        coin_storage.write(l.id + ' ' + str(l.price) + ' ' + str(l.timestamp) + '\n')  
+
 
 # Method to populate the current price attribute of the coin objects
 def get_current_price(id):
@@ -98,43 +119,10 @@ def get_one_month_percentage(id, current_price):
 # hours ago, and replace it with the new price
 def update_recent_prices(time):
     for i in coin_history_objects:
-        if i.timestamp == 'time:
+        if i.timestamp == time:
             # Rewriting old time with new time. 
             i.price = cg.get_price(i.id, 'eur')
             
-
-# THis is more than likely a dead/old function, 
-# No need to review, just keeping incase theres something in
-# I need from it
-def get_last_twelve_hours_prices(coin_list):
-    print("getting last minutes data for all coins")
-    
-    coin_history = []
-    coin_storage = open("coins.txt", 'w+')
-    counter = 0
-
-    while True:
-        for i in coin_list:
-            current_time = datetime.datetime.now()
-
-            if (current_time.second%1) == 0:
-                print(current_time)
-                #time.sleep(58)
-                x = current_time.strftime('%Y-%m-%d %H:%M:%S')
-                #print(x)
-                current = cg.get_price(i, 'eur')
-                #print(current_price)
-                print(x)
-                coin_history.append({x:current})
-                coin_storage.write(json.dumps({x:current}))
-                coin_storage.write('\n')
-                counter = counter + 1
-        time.sleep(30)
-        coin_storage.write('\n\n')
-                
-            #if counter == 30:
-            #    break
-            #break
 
 def main():
     # main method
