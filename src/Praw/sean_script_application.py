@@ -1,10 +1,10 @@
 '''
-# This is meant to be the more advanced scipt in using PRAW
-# It does the same as sean_script.py and also...
-# if hot thread isn't above 50 upvotes, don't print it
-# gets rid of 'replace_more' comments
-# get a flattened sit of comments
-# make a file called comments.txt
+This is meant to be the more advanced scipt in using PRAW
+It does the same as sean_script.py and also...
+if hot thread isn't above 50 upvotes, don't print it
+gets rid of 'replace_more' comments
+get a flattened sit of comments
+make a file called comments.txt
 '''
 import praw
 import json
@@ -36,9 +36,11 @@ reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
                      password='1508sh1998Red',
                      user_agent='CCPB v1.0')
 
-crypto_subreddit = reddit.subreddit('CryptoCurrency')  # this is the subreddit
+# Retrive subreddit r/CryptoCurrency
+crypto_subreddit = reddit.subreddit('CryptoCurrency')
 
-hot_crypto = crypto_subreddit.hot(limit=3)  # this retrieves a categroy of that subreddit
+# this retrieves the hot categroy of that subreddit
+hot_crypto = crypto_subreddit.hot(limit=3)
 
 for submission in hot_crypto:  # submissions are the subreddit threads, they are an object
     if not submission.stickied and submission.ups > 50:  # only take submission if it is not stickied and has > 50 votes
