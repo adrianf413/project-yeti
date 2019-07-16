@@ -29,17 +29,13 @@ def main():
     for i in coin_id_list:
         coin_object_list.append(Coin(i, cg.get_price(i, 'eur')))
 
-    for j in coin_object_list:
-        print(j.id)
-        print(j.price)
+    #for j in coin_object_list:
+    #    print(j.id)
+    #    print(j.price)
 
     # initialise the coin data for the previous 24 hours
     print("Initiating coins")
     rh.initiate_coin_history(coin_id_list)
-    print("One minute percentage difference is:")
-    for k in coin_object_list:
-        x = rh.get_one_minute_percentage(k.id, k.price)
-        print(x)
 
 while True:
     print("Enterred infinite loop")
