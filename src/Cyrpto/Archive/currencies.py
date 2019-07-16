@@ -14,7 +14,6 @@ today_date = datetime.datetime.now()
 # Method to get the percentage difference for a certain coin based on a particular
 # date relative to the current date and time
 def get_percentage_difference_by_time(id, currency, date):
-
     current = cg.get_price(id, currency)
     old = cg.get_coin_history_by_id(id, date)
     current_euro = current[id][currency]
