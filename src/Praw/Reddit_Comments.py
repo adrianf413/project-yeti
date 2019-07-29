@@ -9,6 +9,7 @@ make a file called comments.txt
 import praw
 import json
 
+dict_List = []
 conversationDict = {}
 
 
@@ -30,6 +31,10 @@ def make_a_text_file_for_a_submission(title, ups, id, version):
     return textFileName
 
 
+def return_conversation_dict():
+    return dict_List
+
+
 reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
                      client_secret='wV7ATmzBZlVnxSok7fIO8FBlyp0',
                      udername='harkinsean4',
@@ -40,7 +45,7 @@ reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
 crypto_subreddit = reddit.subreddit('CryptoCurrency')
 
 # this retrieves the hot categroy of that subreddit
-hot_crypto = crypto_subreddit.hot(limit=3)
+hot_crypto = crypto_subreddit.hot(limit=4)
 
 for submission in hot_crypto:  # submissions are the subreddit threads, they are an object
     if not submission.stickied and submission.ups > 50:  # only take submission if it is not stickied and has > 50 votes
@@ -49,9 +54,6 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
 
         textFileName = make_a_text_file_for_a_submission(
             submission.title, submission.ups, submission.id, '1')
-
-        textFileName2 = make_a_text_file_for_a_submission(
-            submission.title, submission.ups, submission.id, '2')
 
         # replace_more is here because in Reddit there are so many replies
         # to comments that it you must 'load more comments' which is another
@@ -72,12 +74,6 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                     # this array contains the cmment body, upvotes and another dictionary
                     conversationDict[comment.id] = [comment.body, comment.ups, {}]
 
-                    with open(textFileName, 'a', encoding='utf8') as myfile:
-
-                        myfile.write('Top Level comment: ')
-                        myfile.write('{} {} \n' .format(json.dumps(
-                            comment.id), json.dumps(comment.body)))
-
                 # if it is a reply
                 if comment.is_root is False:
 
@@ -92,12 +88,6 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                     if parent in conversationDict:
                         conversationDict[parent][2][comment.id] = [comment.body, comment.ups]
 
-                    with open(textFileName, 'a', encoding='utf8') as myfile:
-
-                        myfile.write('{} Reply to parent comment {}: ' .format('\t', parent))
-                        myfile.write('{} {} \n' .format(json.dumps(
-                            comment.id), json.dumps(comment.body)))
-
         # iterate through each key in dictionary
         for post_id in conversationDict:
 
@@ -107,16 +97,18 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
             # get replies, which is dictionary of replies to that top level comment/message
             replies = conversationDict[post_id][2]
 
-            with open(textFileName2, 'a') as my_file:
+            with open(textFileName, 'a', encoding='utf8') as my_file:
 
                 my_file.write('{} {}'.format(35*'_', '\nTop Level comment: '))
                 my_file.write('{} \n' .format(message))
 
             for reply in replies:  # loop thorugh the keys in replies dictionary
 
-                with open(textFileName2, 'a') as my_file:
+                with open(textFileName, 'a', encoding='utf8') as my_file:
 
                     my_file.write("\t--\nreply: {} \nupvotes: {}\n" .format(
                         replies[reply][0][:200], replies[reply][1]))
 
-    conversationDict = {}  # clear conversationDict for next text file
+        # append the ordered_reddit_comments_dict to a dict with key as title
+        dict_List.append({submission.title: conversationDict})
+    conversationDict = {}  # clear conversationDict for thread submission text file
