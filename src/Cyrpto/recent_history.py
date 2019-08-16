@@ -30,10 +30,6 @@ def initiate_coin_history(coin_id_list):
                 # stoting list of Coin objects
                 coin_history_objects.append(temp_coin_object)
             counter = counter + 1
-    print("Done writing 3 mintutes worth of data")
-    for l in coin_history_objects:
-        coin_storage.write(l.id + ' ' + str(l.price) + ' ' + str(l.timestamp) + '\n')  
-
 
 # Method to populate the current price attribute of the coin objects
 def get_current_price(id):
@@ -55,7 +51,7 @@ def get_ten_minute_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return (current_price/q.price)-1 * 100
+            return ((current_price/q.price)-1) * 100
 
 def get_thirty_minute_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -63,7 +59,7 @@ def get_thirty_minute_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return (current_price/q.price)-1 * 100
+            return ((current_price/q.price)-1) * 100
 
 def get_one_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -71,7 +67,7 @@ def get_one_hour_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return (current_price/q.price)-1 * 100
+            return ((current_price/q.price)-1) * 100
 
 def get_six_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -79,7 +75,7 @@ def get_six_hour_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return (current_price/q.price)-1 * 100
+            return ((current_price/q.price)-1) * 100
 
 def get_twelve_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -87,7 +83,7 @@ def get_twelve_hour_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return (current_price/q.price)-1 * 100
+            return ((current_price/q.price)-1) * 100
 
 def get_one_day_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -95,7 +91,7 @@ def get_one_day_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%d-%m-%Y')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return (current_price/q.price)-1 * 100
+            return ((current_price/q.price)-1) * 100
 
 def get_one_week_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -103,7 +99,7 @@ def get_one_week_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%d-%m-%Y')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return (current_price/q.price)-1 * 100
+            return ((current_price/q.price)-1) * 100
 
 def get_one_month_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -111,7 +107,7 @@ def get_one_month_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%d-%m-%Y')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return (current_price/q.price)-1 * 100
+            return ((current_price/q.price)-1) * 100
 
 # WORK IN PROGRESS
 # This method will find the price for a specific time 24
