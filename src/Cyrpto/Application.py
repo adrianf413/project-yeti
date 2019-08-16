@@ -24,11 +24,6 @@ def main():
                     'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
                     'dogecoin']
     
-    # Initialising the list of Coin objects.
-    coin_object_list = []
-    for i in coin_id_list:
-        coin_object_list.append(Coin(i, cg.get_price(i, 'eur')))
-
     #for j in coin_object_list:
     #    print(j.id)
     #    print(j.price)
@@ -37,19 +32,28 @@ def main():
     print("Initiating coins")
     rh.initiate_coin_history(coin_id_list)
 
-while True:
-    print("Enterred infinite loop")
-	# monitor the input from the coin analytics
-    break
+    # Initialising the list of Coin objects.
+    coin_object_list = []
+    for i in coin_id_list:
+        coin_object_list.append(Coin(i, cg.get_price(i, 'eur')))
+
+    #for i in coin_object_list:
+    #    print(i.id + " - One muinute percentage difference is: " + str(rh.get_one_minute_percentage(i.id, i.price)))
+    #    print(i.id + " - ten muinute percentage difference is: " + str(rh.get_ten_minute_percentage(i.id, i.price)))
+
+    while True:
+        print("Enterred infinite loop")
+        # monitor the input from the coin analytics
+        break
+        
+        # monitor the input from the reddit analytics
+
+
+        # make a decision based on the analytics inputs
     
-    # monitor the input from the reddit analytics
 
-
-    # make a decision based on the analytics inputs
- 
-
-    # if theres a positive response from analytics
-    # Excecute exchange code for selected Coin
+        # if theres a positive response from analytics
+        # Excecute exchange code for selected Coin
 
 if __name__ == '__main__':
     main()

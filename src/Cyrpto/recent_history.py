@@ -19,7 +19,7 @@ coin_storage = open("12hourstorage.txt", 'w+')
 def initiate_coin_history(coin_id_list):
     # Getting and storing the price every minute for 24 hours
     counter = 0
-    while counter < (3):
+    while counter < (24*60):
         if datetime.datetime.now().second == 0:
             for i in coin_id_list:
                 current_time = datetime.datetime.now()
@@ -30,10 +30,6 @@ def initiate_coin_history(coin_id_list):
                 # stoting list of Coin objects
                 coin_history_objects.append(temp_coin_object)
             counter = counter + 1
-    print("Done writing 3 mintutes worth of data")
-    for l in coin_history_objects:
-        coin_storage.write(l.id + ' ' + str(l.price) + ' ' + str(l.timestamp) + '\n')  
-
 
 # Method to populate the current price attribute of the coin objects
 def get_current_price(id):
