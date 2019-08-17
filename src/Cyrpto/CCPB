@@ -1,0 +1,3 @@
+[17-08-2019 12:24:19][root        ][INFO] Started CryptoCurrencyPredictiveBuying application
+[17-08-2019 12:24:19][root        ][INFO] Initiating coin data for previous 24 hours
+[17-08-2019 12:24:19][root        ][INFO] Starting to store coin data every minute

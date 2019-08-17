@@ -8,7 +8,12 @@ from pycoingecko import CoinGeckoAPI
 import datetime
 import time
 import json
+import logging
 from coin import Coin
+
+
+# Set the logging congfiguration
+logging.basicConfig(filename='CCPB', level=logging.INFO, filemode='w', format='[%(asctime)s][%(name)-12s][%(levelname)-4s] %(message)s', datefmt='%d-%m-%Y %H:%M:%S')
 
 cg = CoinGeckoAPI()
 # List used to store objects that will hold the prices
@@ -19,7 +24,8 @@ coin_storage = open("12hourstorage.txt", 'w+')
 def initiate_coin_history(coin_id_list):
     # Getting and storing the price every minute for 24 hours
     counter = 0
-    while counter < (24*60):
+    logging.info("Starting to store coin data every minute")
+    while counter < (3):
         if datetime.datetime.now().second == 0:
             for i in coin_id_list:
                 current_time = datetime.datetime.now()
@@ -27,9 +33,11 @@ def initiate_coin_history(coin_id_list):
                 price = cg.get_price(i, 'eur')
                 temp_coin_object = Coin(i, price)
                 temp_coin_object.timestamp = time_value
-                # stoting list of Coin objects
+                # storing list of Coin objects
                 coin_history_objects.append(temp_coin_object)
+                logging.info("Successfully stored prices for this minute for:" + i)
             counter = counter + 1
+    logging.info("Completed initiatie coins function")
 
 # Method to populate the current price attribute of the coin objects
 def get_current_price(id):
