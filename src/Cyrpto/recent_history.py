@@ -24,7 +24,7 @@ def initiate_coin_history(coin_id_list):
     # Getting and storing the price every minute for 24 hours
     counter = 0
     logging.info("Starting to store coin data every minute")
-    while counter < (10):
+    while counter < (24*60):
         if datetime.datetime.now().second == 0:
             for i in coin_id_list:
                 current_time = datetime.datetime.now()
@@ -34,8 +34,8 @@ def initiate_coin_history(coin_id_list):
                 temp_coin_object.timestamp = time_value
                 # storing list of Coin objects
                 coin_history_objects.append(temp_coin_object)
-                logging.info("Successfully stored prices for this minute for:" + i)
             counter = counter + 1
+            logging.info("Finished storing coins for this minute")
     logging.info("Completed initiatie coins function")
 
 # Method to populate the current price attribute of the coin objects
@@ -123,6 +123,7 @@ def update_recent_prices(time):
         if i.timestamp == time:
             print("Old price = " + str(i.price))
             # Rewriting old time with new time. 
+            logging.info("Rewriting old data with new data")
             new_price = cg.get_price(i.id, 'eur')
             i.price = new_price[i.id]['eur']
             print("New price = " + str(i.price))

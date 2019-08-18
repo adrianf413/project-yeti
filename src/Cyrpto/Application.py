@@ -29,6 +29,9 @@ def main():
                     'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
                     'dogecoin']
     
+    # List to store the results of the GTB/GTS equation
+    gts_gtb_list = []
+
     #for j in coin_object_list:
     #    print(j.id)
     #    print(j.price)
@@ -49,15 +52,10 @@ def main():
         print(i.id + " - One day percentage difference is: " + str(rh.get_one_day_percentage(i.id, i.price)))
     #    print(i.id + " - ten muinute percentage difference is: " + str(rh.get_ten_minute_percentage(i.id, i.price)))
 
-    # test update
-    time = datetime.datetime.now()
-    time_to_update = time.strftime('%H:%M')
-    rh.update_recent_prices(time_to_update)
-
     while True:
-        logging.info("Enterred infinite loop - about to break ..")
+        logging.info("Enterred infinite loop")
         # monitor the input from the coin analytics
-        break
+        
         # Dummy equation
         for i in coin_object_list:
             i.one_minute_percentage = rh.get_one_minute_percentage()
@@ -69,6 +67,29 @@ def main():
             i.one_day_percentage = rh.get_one_day_percentage()
             i.one_week_percentage = rh.get_one_week_percentage()
             i.one_month_percentage = rh.get_one_month_percentage()
+
+        #for j in coin_object_list:
+        #    print(j.one_minute_percentage)
+        #    print(j.ten_minute_percentage) 
+        #    print(j.thirty_minute_percentage)
+        #    print(j.one_hour_percentage)
+        #    print(j.six_hour_percentage)
+        #    print(j.twelve_hour_percentage)
+        #    print(j.one_day_percentage)
+        #    print(j.one_week_percentage)
+        #    print(j.one_month_percentage)
+        
+        ########################################################################
+        # Putting results in to GTS/GTB Equation
+        for j in coin_object_list:
+            result = (j.one_minute_percentage * 3) + (j.ten_minute_percentage * 25) + (j.thirty_minute_percentage * 80) + (j.one_hour_percentage * 80) + (j.six_hour_percentage * 45) + (j.twelve_hour_percentage * 25) + (j.one_day_percentage * 10) + (j.one_week_percentage * 1) + (j.one_month_percentage * 1) 
+            gts_gtb_list.append(result)
+
+        logging.info("Printing GTS/GTB results for each coin")
+        index = 0
+        for i in gts_gtb_list:
+            logging.info(coin_id_list[index] + ": "+  str(i))
+        ########################################################################
         # monitor the input from the reddit analytics
 
 
@@ -76,10 +97,11 @@ def main():
     
 
         # if theres a positive response from analytics
-        
+
 
         # Excecute exchange code for selected Coin
         # Update coin data
+        logging.info("Updating stored data for each coin")
         update = True
         while update:
             if datetime.datetime.now().second == 0:
@@ -87,6 +109,7 @@ def main():
                 time_to_update = time.strftime('%H:%M')
                 rh.update_recent_prices(time_to_update)
                 update = False
+        logging.info("Finished updating stored data for each coin")
 
 if __name__ == '__main__':
     main()
