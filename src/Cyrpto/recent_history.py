@@ -105,17 +105,17 @@ def get_one_week_percentage(id, current_price):
     current_time = datetime.datetime.now()
     one_week_ago = current_time - datetime.timedelta(days = 7)
     key_value = one_week_ago.strftime('%d-%m-%Y')
-    for q in coin_history_objects:
-        if q.id == id and q.timestamp == key_value:
-            return ((current_price/q.price)-1) * 100
+    old = cg.get_coin_history_by_id(id, key_value)
+    old_euro = old['market_data']['current_price']['eur']
+    return ((current_price/old_euro)-1) * 100
 
 def get_one_month_percentage(id, current_price):
     current_time = datetime.datetime.now()
     one_month_ago = current_time - datetime.timedelta(days = 28)
     key_value = one_month_ago.strftime('%d-%m-%Y')
-    for q in coin_history_objects:
-        if q.id == id and q.timestamp == key_value:
-            return ((current_price/q.price)-1) * 100
+    old = cg.get_coin_history_by_id(id, key_value)
+    old_euro = old['market_data']['current_price']['eur']
+    return ((current_price/old_euro)-1) * 100
 
 # WORK IN PROGRESS
 # This method will find the price for a specific time 24
