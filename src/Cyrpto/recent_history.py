@@ -11,7 +11,6 @@ import json
 import logging
 from coin import Coin
 
-
 # Set the logging congfiguration
 logging.basicConfig(filename='CCPB', level=logging.INFO, filemode='w', format='[%(asctime)s][%(name)-12s][%(levelname)-4s] %(message)s', datefmt='%d-%m-%Y %H:%M:%S')
 
@@ -25,7 +24,7 @@ def initiate_coin_history(coin_id_list):
     # Getting and storing the price every minute for 24 hours
     counter = 0
     logging.info("Starting to store coin data every minute")
-    while counter < (2):
+    while counter < (10):
         if datetime.datetime.now().second == 0:
             for i in coin_id_list:
                 current_time = datetime.datetime.now()
@@ -117,45 +116,14 @@ def get_one_month_percentage(id, current_price):
     old_euro = old['market_data']['current_price']['eur']
     return ((current_price/old_euro)-1) * 100
 
-# WORK IN PROGRESS
 # This method will find the price for a specific time 24
 # hours ago, and replace it with the new price
 def update_recent_prices(time):
     for i in coin_history_objects:
         if i.timestamp == time:
+            print("Old price = " + str(i.price))
             # Rewriting old time with new time. 
-            i.price = cg.get_price(i.id, 'eur')
-            
+            new_price = cg.get_price(i.id, 'eur')
+            i.price = new_price[i.id]['eur']
+            print("New price = " + str(i.price))
 
-def main():
-    # main method
-    cg = CoinGeckoAPI()
-    coin_history = []
-    coin_storage = open("12hourstorage.txt", 'w+')
-    counter = 0
-    coin_objects = []
-    coin_list_ids = ['bitcoin', 'bitcoin-cash', 'ethereum', 'litecoin', 'ripple', 'eos',
-                    'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
-                    'dogecoin']
-    current_time = datetime.datetime.now()
-    counter = 0
-
-    # Getting and storing the price every minute for 5 minutes
-    # As a test 
-    while counter < 5:
-        if datetime.datetime.now().second == 0:
-            for i in coin_list_ids:
-                z = current_time.strftime('%H:%M:%S')
-                price = cg.get_price(i, 'eur')
-                # stoting list of Coin objects
-                # Coin obbject is in coin.py
-                coin_objects.append(Coin(i, price[i]['eur'], datetime.datetime.now()))
-            counter = counter + 1
-
-    # Writing 5 minute data to local storage for debugging puposes        
-    for l in coin_objects:
-        coin_storage.write(l.id + ' ' + str(l.price) + ' ' + str(l.timestamp) + '\n')  
-
-
-if __name__ == '__main__':
-    main()

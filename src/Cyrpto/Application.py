@@ -49,6 +49,11 @@ def main():
         print(i.id + " - One day percentage difference is: " + str(rh.get_one_day_percentage(i.id, i.price)))
     #    print(i.id + " - ten muinute percentage difference is: " + str(rh.get_ten_minute_percentage(i.id, i.price)))
 
+    # test update
+    time = datetime.datetime.now()
+    time_to_update = time.strftime('%H:%M')
+    rh.update_recent_prices(time_to_update)
+
     while True:
         logging.info("Enterred infinite loop - about to break ..")
         # monitor the input from the coin analytics
@@ -71,7 +76,17 @@ def main():
     
 
         # if theres a positive response from analytics
+        
+
         # Excecute exchange code for selected Coin
+        # Update coin data
+        update = True
+        while update:
+            if datetime.datetime.now().second == 0:
+                time = datetime.datetime.now()
+                time_to_update = time.strftime('%H:%M')
+                rh.update_recent_prices(time_to_update)
+                update = False
 
 if __name__ == '__main__':
     main()
