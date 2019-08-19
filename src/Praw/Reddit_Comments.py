@@ -1,15 +1,15 @@
 '''
-This is meant to be the more advanced scipt in using PRAW
-It does the same as sean_script.py and also...
-if hot thread isn't above 50 upvotes, don't print it
-gets rid of 'replace_more' comments
-get a flattened sit of comments
-make a file called comments.txt
+This script take multiple hot thread above 50 upvotes,
+Flattens the list of comments in each thread
+Organises the comments into a dictionary
+Iterates through the dictionary to make a text file of comments human readable
+it can has a function to return list of several dictionaries full of comments for each thread
 '''
 import praw
 import json
 
 dict_List = []
+dict_list_of_1 = []
 conversationDict = {}
 
 
@@ -20,6 +20,7 @@ def make_a_text_file_for_a_submission(title, ups, id, version):
     with open(textFileName, 'w+', encoding='utf8') as myfile:
         myfile.seek(0)
 
+        myfile.write('Made in Reddit_Comments.py ')
         myfile.write('Thread Title: ')
         myfile.write(json.dumps(title))
         myfile.write(json.dumps(ups))
@@ -32,7 +33,16 @@ def make_a_text_file_for_a_submission(title, ups, id, version):
 
 
 def return_conversation_dict():
-    return dict_List
+    '''
+    this function returns a list of dictionaries made up of:
+    submission titles and their conversation dictionarires
+    formatted like: {submission.title: conversationDict}
+    '''
+    # return dict_List
+    # for now I only want it to return one dictionary so I'm manipulating the function
+    # to return dict_list_of_1 which is only of size 1
+    dict_list_of_1.append(dict_List.pop(0))
+    return dict_list_of_1
 
 
 reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
@@ -45,15 +55,18 @@ reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
 crypto_subreddit = reddit.subreddit('CryptoCurrency')
 
 # this retrieves the hot categroy of that subreddit
-hot_crypto = crypto_subreddit.hot(limit=4)
+hot_crypto = crypto_subreddit.hot(limit=3)
 
 for submission in hot_crypto:  # submissions are the subreddit threads, they are an object
     if not submission.stickied and submission.ups > 50:  # only take submission if it is not stickied and has > 50 votes
 
         print('Submission Title: {}, ups: {} \n' .format(submission.title, submission.ups))
 
+        # the following code is replicated in main.py in the function convert_Dict_to_Text_File 1/2
+        '''
         textFileName = make_a_text_file_for_a_submission(
             submission.title, submission.ups, submission.id, '1')
+        '''
 
         # replace_more is here because in Reddit there are so many replies
         # to comments that it you must 'load more comments' which is another
@@ -88,13 +101,15 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                     if parent in conversationDict:
                         conversationDict[parent][2][comment.id] = [comment.body, comment.ups]
 
-        # iterate through each key in dictionary
+        # the following code is replicated in main.py in the function convert_Dict_to_Text_File
+        '''
+        # iterate through each key in dictionary now and write it to a text file 2/2
         for post_id in conversationDict:
 
             # gets the top level comment body
             message = conversationDict[post_id][0]
 
-            # get replies, which is dictionary of replies to that top level comment/message
+            # get replies of top level comment, replies is a dictionary
             replies = conversationDict[post_id][2]
 
             with open(textFileName, 'a', encoding='utf8') as my_file:
@@ -108,7 +123,7 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
 
                     my_file.write("\t--\nreply: {} \nupvotes: {}\n" .format(
                         replies[reply][0][:200], replies[reply][1]))
-
+        '''
         # append the ordered_reddit_comments_dict to a dict with key as title
         dict_List.append({submission.title: conversationDict})
     conversationDict = {}  # clear conversationDict for thread submission text file
