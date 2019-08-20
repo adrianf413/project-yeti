@@ -1,12 +1,13 @@
-# import re
 # import string
-import unicodedata
-# import nltk
-# import inflect
 # from bs4 import BeautifulSoup
 # from nltk import word_tokenize, sent_tokenize
-# from nltk.corpus import stopwords
-# from nltk.stem import LancasterStemmer, WordNetLemmatizer
+import unicodedata
+import re
+import inflect
+from nltk.corpus import stopwords
+from nltk.stem import LancasterStemmer, WordNetLemmatizer
+# import nltk
+# nltk.download("stopwords")
 
 
 def remove_non_ascii(words):
@@ -28,7 +29,6 @@ def to_lowercase(words):
     return new_words
 
 
-'''
 def remove_punctuation(words):
     """Remove punctuation from list of tokenized words"""
     new_words = []
@@ -37,6 +37,7 @@ def remove_punctuation(words):
         if new_word != '':
             new_words.append(new_word)
     return new_words
+
 
 def replace_numbers(words):
     """Replace all interger occurrences in list of tokenized words with textual representation"""
@@ -50,6 +51,7 @@ def replace_numbers(words):
             new_words.append(word)
     return new_words
 
+
 def remove_stopwords(words):
     """Remove stop words from list of tokenized words"""
     new_words = []
@@ -57,6 +59,7 @@ def remove_stopwords(words):
         if word not in stopwords.words('english'):
             new_words.append(word)
     return new_words
+
 
 def stem_words(words):
     """Stem words in list of tokenized words"""
@@ -67,6 +70,8 @@ def stem_words(words):
         stems.append(stem)
     return stems
 
+
+'''
 def lemmatize_verbs(words):
     """Lemmatize verbs in list of tokenized words"""
     lemmatizer = WordNetLemmatizer()

@@ -107,7 +107,20 @@ def main():
 
                 # Convert all characters to lowercase from list of tokenized words
                 words = normalisation.to_lowercase(words)
-                print(words)
+
+                # removes punctuation such as: ':' '.' ',' '-' '?' '&' '#' ';' '/' '()' '[]'
+                # if it is the middle of a word e.g. ['main.py'] -> ['mainpy']
+                words = normalisation.remove_punctuation(words)
+
+                # convert integers representation to text
+                words = normalisation.replace_numbers(words)
+
+                # removce stop words such as:
+                words = normalisation.remove_stopwords(words)
+
+                # removce stop words such as:
+                # words = normalisation.stem_words(words)
+                # print(words)
 
                 # textFileName = textFile[:10] + '_contracted_' + '.txt'
                 # with open(textFileName, 'a', encoding='utf8') as myfile:
