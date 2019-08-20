@@ -4,21 +4,24 @@ Iterates through each dictionary to make a text file of comments human readable
 Contractions in the text file are the expanded
 '''
 
-import Reddit_Comments as Reddit_Comments
+# import Reddit_Comments as Reddit_Comments
 # import re
 # import string
 # import unicodedata
-# import nltk
+import nltk
 import contractions
 # import inflect
 # from bs4 import BeautifulSoup
-# from nltk import word_tokenize, sent_tokenize
+from nltk import word_tokenize, sent_tokenize
+import simplejson
 # from nltk.corpus import stopwords
 # from nltk.stem import LancasterStemmer, WordNetLemmatizer
+import normalisation
 
 conversationDictList = []
 dict1 = {}
 dictTitle = 'empty'
+nltk.download('punkt')
 
 
 # This returns the ordered_reddit_comments_dict and prints the thread title
@@ -56,14 +59,16 @@ def convert_Dict_to_Text_File(dictionary, dictTitle):
         replies = dictionary[post_id][2]
 
         with open(textFileName, 'a', encoding='utf8') as my_file:
-            my_file.write('{} {}'.format(35*'_', '\nTop Level comment: '))
+            # my_file.write('{} {}'.format(35*'_', '\nTop Level comment: '))
+            my_file.write('{}'.format('\nTop Level comment: '))
             my_file.write('{} \n' .format(message))
 
         for reply in replies:  # loop thorugh the keys in replies dictionary
             with open(textFileName, 'a', encoding='utf8') as my_file:
-                my_file.write("\t--\nreply: {} \nupvotes: {}\n" .format(
+                # my_file.write("\t--\nreply: {} \nupvotes: {}\n" .format(
+                #    replies[reply][0][:200], replies[reply][1]))
+                my_file.write("\t\nreply: {} \nupvotes: {}\n" .format(
                     replies[reply][0][:200], replies[reply][1]))
-
     return textFileName
 
 
@@ -74,23 +79,43 @@ def replace_contractions(text):
 
 def main():
     print("\nmain program\n")
-    conversationDictList = Reddit_Comments.return_conversation_dict()
-    print('length of dict list passed into main: {}' .format(len(conversationDictList)))
+    # conversationDictList = Reddit_Comments.return_conversation_dict()
+    # print('length of dict list passed into main: {}' .format(len(conversationDictList)))
+
+    conversationDictList = ['sample']
 
     while conversationDictList:
-        dictTitle, dictionary = pop_Thread(conversationDictList)
-        print('Working with: ' + dictTitle)
+        # dictTitle, dictionary = pop_Thread(conversationDictList)
+        # print('Working with: ' + dictTitle)
 
-        textFile = convert_Dict_to_Text_File(dictionary, dictTitle)
+        # textFile = convert_Dict_to_Text_File(dictionary, dictTitle)
+        textFile = 'Don’t get .txt'
 
         # read the dictionary converted text file line by line and expand contractions
         with open(textFile, 'r', encoding='utf8') as my_file:
             for line in my_file.readlines():
                 text = replace_contractions(line)
 
-                textFileName = textFile + '_contracted_' + '.txt'
-                with open(textFileName, 'a', encoding='utf8') as myfile:
-                    myfile.write(text)
+                # TOKENISATION
+                # return a python list of words
+                words = nltk.word_tokenize(text)
+                print(words)
+
+                # NORMALISATION
+                # removes non-ascii character such as: emojis, '”',
+                words = normalisation.remove_non_ascii(words)
+
+                # Convert all characters to lowercase from list of tokenized words
+                words = normalisation.to_lowercase(words)
+                print(words)
+
+                # textFileName = textFile[:10] + '_contracted_' + '.txt'
+                # with open(textFileName, 'a', encoding='utf8') as myfile:
+                # myfile.write(words)
+                # myfile.write('\n')
+                # simplejson.dump(words, myfile)
+
+        conversationDictList = []
 
 
 if __name__ == '__main__':
