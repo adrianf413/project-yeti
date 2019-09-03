@@ -1,5 +1,5 @@
 '''
-This script take multiple hot thread above 50 upvotes,
+This script takes multiple hot thread above 50 upvotes,
 Flattens the list of comments in each thread
 Organises the comments into a dictionary
 Iterates through the dictionary to make a text file of comments human readable
@@ -62,8 +62,10 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
 
         print('Submission Title: {}, ups: {} \n' .format(submission.title, submission.ups))
 
-        # the following code is replicated in main.py in the function convert_Dict_to_Text_File 1/2
         '''
+        uncomment this to make a new text file based off a thread 1/2
+
+        # the following code is replicated in main.py in the function convert_Dict_to_Text_File 1/2
         textFileName = make_a_text_file_for_a_submission(
             submission.title, submission.ups, submission.id, '1')
         '''
@@ -84,7 +86,7 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                 if comment.is_root is True:
 
                     # store an array in the conversationDict based on the comment.id key
-                    # this array contains the cmment body, upvotes and another dictionary
+                    # this array contains the tl comment body, upvotes and another dictionary
                     conversationDict[comment.id] = [comment.body, comment.ups, {}]
 
                 # if it is a reply
@@ -102,12 +104,17 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                         conversationDict[parent][2][comment.id] = [comment.body, comment.ups]
 
         # the following code is replicated in main.py in the function convert_Dict_to_Text_File
+        # because this code should only return the dictionary not make text files!
+
         '''
+        uncomment this to make a new text file based off a thread 2/2
+
         # iterate through each key in dictionary now and write it to a text file 2/2
         for post_id in conversationDict:
 
             # gets the top level comment body
-            message = conversationDict[post_id][0]
+            tlmessage = conversationDict[post_id][0]
+            tlupvotes = conversationDict[post_id][1]
 
             # get replies of top level comment, replies is a dictionary
             replies = conversationDict[post_id][2]
@@ -115,7 +122,7 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
             with open(textFileName, 'a', encoding='utf8') as my_file:
 
                 my_file.write('{} {}'.format(35*'_', '\nTop Level comment: '))
-                my_file.write('{} \n' .format(message))
+                my_file.write('{} \nupvotes: {} \n' .format(tlmessage, tlupvotes))
 
             for reply in replies:  # loop thorugh the keys in replies dictionary
 

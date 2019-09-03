@@ -5,9 +5,13 @@ import unicodedata
 import re
 import inflect
 from nltk.corpus import stopwords
-from nltk.stem import LancasterStemmer, WordNetLemmatizer
+from nltk.stem import LancasterStemmer, WordNetLemmatizer  # PorterStemmer
+
 # import nltk
+# these are one time donwloads below
 # nltk.download("stopwords")
+# nltk.download('punkt')
+# nltk.download('wordnet')
 
 
 def remove_non_ascii(words):
@@ -62,7 +66,13 @@ def remove_stopwords(words):
 
 
 def stem_words(words):
-    """Stem words in list of tokenized words"""
+    """
+    Stem words in list of tokenized words
+    Stemming reduces inflection in words to their root forms
+    Stemming maps a group of words to the same stem even if the
+    stem itself is not a valid word in the Language
+    """
+    # stemmer = PorterStemmer()
     stemmer = LancasterStemmer()
     stems = []
     for word in words:
@@ -71,7 +81,6 @@ def stem_words(words):
     return stems
 
 
-'''
 def lemmatize_verbs(words):
     """Lemmatize verbs in list of tokenized words"""
     lemmatizer = WordNetLemmatizer()
@@ -80,12 +89,3 @@ def lemmatize_verbs(words):
         lemma = lemmatizer.lemmatize(word, pos='v')
         lemmas.append(lemma)
     return lemmas
-
-def normalize(words):
-    words = remove_non_ascii(words)
-    words = to_lowercase(words)
-    words = remove_punctuation(words)
-    words = replace_numbers(words)
-    words = remove_stopwords(words)
-    return words
-'''
