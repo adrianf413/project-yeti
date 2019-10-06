@@ -116,7 +116,7 @@ def main():
         # print('Working with: ' + dictTitle)
 
         # textFile = convert_Dict_to_Text_File(dictionary, dictTitle)
-        textFile = 'Where shou1.txt'
+        textFile = 'textFiles/Where shou1.txt'
 
         # open the text file - then read in all the lines of text, and nromalise each line
         with open(textFile, 'r', encoding='utf8') as my_file:
