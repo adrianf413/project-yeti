@@ -12,7 +12,7 @@ import logging
 from coin import Coin
 
 # Set the logging congfiguration
-logging.basicConfig(filename='CCPB', level=logging.INFO, filemode='w', format='[%(asctime)s][%(name)-12s][%(levelname)-4s] %(message)s', datefmt='%d-%m-%Y %H:%M:%S')
+logging.basicConfig(filename='CCPB.log', level=logging.INFO, filemode='w', format='[%(asctime)s][%(name)-12s][%(levelname)-4s] %(message)s', datefmt='%d-%m-%Y %H:%M:%S')
 
 cg = CoinGeckoAPI()
 # List used to store objects that will hold the prices
@@ -27,20 +27,27 @@ def initiate_coin_history(coin_id_list):
     while counter < (24*60):
         if datetime.datetime.now().second == 0:
             for i in coin_id_list:
-                current_time = datetime.datetime.now()
-                time_value = current_time.strftime('%H:%M')
-                price = cg.get_price(i, 'eur')
-                temp_coin_object = Coin(i, price)
-                temp_coin_object.timestamp = time_value
-                # storing list of Coin objects
-                coin_history_objects.append(temp_coin_object)
+                try:
+                    current_time = datetime.datetime.now()
+                    time_value = current_time.strftime('%H:%M')
+                    price = cg.get_price(i, 'eur')
+                    temp_coin_object = Coin(i, price)
+                    temp_coin_object.timestamp = time_value
+                    # storing list of Coin objects
+                    coin_history_objects.append(temp_coin_object)
+                except:
+                    logging.error("Error initiating coin information for " + i)
             counter = counter + 1
             logging.info("Finished storing coins for this minute")
     logging.info("Completed initiatie coins function")
 
 # Method to populate the current price attribute of the coin objects
 def get_current_price(id):
-    current_price = cg.get_price(id, 'eur')
+    try:
+        current_price = cg.get_price(id, 'eur')
+    except:
+        logging.error("Error retreiving price for " + id)
+        return 0
     return current_price[id]['eur']
 
 # Methods to get the percentage differences for each time period

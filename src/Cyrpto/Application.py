@@ -11,11 +11,9 @@ import datetime
 import logging
 import recent_history as rh
 
-# This is a skeleton class that will be populated once all the parts
-# of the project are working
 
 # Set the logging congfiguration
-logging.basicConfig(filename='CCPB', level=logging.INFO, filemode='w', format='[%(asctime)s][%(name)-12s][%(levelname)-4s] %(message)s', datefmt='%d-%m-%Y %H:%M:%S')
+logging.basicConfig(filename='CCPB.log', level=logging.INFO, filemode='w', format='[%(asctime)s][%(name)-6s][%(levelname)-4s] %(message)s', datefmt='%d-%m-%Y %H:%M:%S')
 
 # creating an instance of the coin gecko API to get retrieve coin data
 cg = CoinGeckoAPI()
@@ -107,7 +105,11 @@ def main():
             if datetime.datetime.now().second == 0:
                 time = datetime.datetime.now()
                 time_to_update = time.strftime('%H:%M')
-                rh.update_recent_prices(time_to_update)
+                try:
+                    rh.update_recent_prices(time_to_update)
+                except:
+                    logging.error("Error updating coin history for this minute")
+                    #logging.info(str(e)
                 update = False
         logging.info("Finished updating stored data for each coin")
 
