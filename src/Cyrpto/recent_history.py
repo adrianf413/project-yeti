@@ -57,7 +57,15 @@ def get_one_minute_percentage(id, current_price):
     key_value = one_minute_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return ((current_price/q.price)-1) * 100
+            value = ((current_price/q.price)-1) * 100
+            print(value)
+            if value != None:
+                return value
+            else:
+                return 0
+        else:
+            return 0
+    
             
 def get_ten_minute_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -65,7 +73,13 @@ def get_ten_minute_percentage(id, current_price):
     key_value = ten_minutes_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return ((current_price/q.price)-1) * 100
+            value = ((current_price/q.price)-1) * 100
+            if value != None:
+                return value
+            else:
+                return 0
+        else:
+            return 0
 
 def get_thirty_minute_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -73,7 +87,13 @@ def get_thirty_minute_percentage(id, current_price):
     key_value = thirty_minutes_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return ((current_price/q.price)-1) * 100
+            value = ((current_price/q.price)-1) * 100
+            if value != None:
+                return value
+            else:
+                return 0
+        else:
+            return 0
 
 def get_one_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -81,7 +101,13 @@ def get_one_hour_percentage(id, current_price):
     key_value = one_hour_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return ((current_price/q.price)-1) * 100
+            value = ((current_price/q.price)-1) * 100
+            if value != None:
+                return value
+            else:
+                return 0
+        else:
+            return 0
 
 def get_six_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -89,7 +115,13 @@ def get_six_hour_percentage(id, current_price):
     key_value = six_hours_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return ((current_price/q.price)-1) * 100
+            value = ((current_price/q.price)-1) * 100
+            if value != None:
+                return value
+            else:
+                return 0
+        else:
+            return 0
 
 def get_twelve_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -97,7 +129,13 @@ def get_twelve_hour_percentage(id, current_price):
     key_value = twelve_hours_ago.strftime('%H:%M')
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
-            return ((current_price/q.price)-1) * 100
+            value = ((current_price/q.price)-1) * 100
+            if value != None:
+                return value
+            else:
+                return 0
+        else:
+            return 0
 
 def get_one_day_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -105,7 +143,11 @@ def get_one_day_percentage(id, current_price):
     key_value = one_day_ago.strftime('%d-%m-%Y')
     old = cg.get_coin_history_by_id(id, key_value)
     old_euro = old['market_data']['current_price']['eur']
-    return ((current_price/old_euro)-1) * 100
+    value = ((current_price/old_euro)-1) * 100
+    if value != None:
+        return value
+    else:
+        return 0
 
 def get_one_week_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -113,7 +155,11 @@ def get_one_week_percentage(id, current_price):
     key_value = one_week_ago.strftime('%d-%m-%Y')
     old = cg.get_coin_history_by_id(id, key_value)
     old_euro = old['market_data']['current_price']['eur']
-    return ((current_price/old_euro)-1) * 100
+    value = ((current_price/old_euro)-1) * 100
+    if value != None:
+        return value
+    else:
+        return 0
 
 def get_one_month_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -121,7 +167,11 @@ def get_one_month_percentage(id, current_price):
     key_value = one_month_ago.strftime('%d-%m-%Y')
     old = cg.get_coin_history_by_id(id, key_value)
     old_euro = old['market_data']['current_price']['eur']
-    return ((current_price/old_euro)-1) * 100
+    value = ((current_price/old_euro)-1) * 100
+    if value != None:
+        return value
+    else:
+        return 0
 
 # This method will find the price for a specific time 24
 # hours ago, and replace it with the new price
