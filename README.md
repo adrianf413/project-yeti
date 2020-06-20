@@ -8,6 +8,15 @@ and this, in conjuction with data from Reddit, will be analyzed and
 attempt to create a trading algorithm that will buy and sell crypto currencies
 at the correct time.
 
+There are 3 parts to this project:
+1. Coin data service
+2. Reddit data service
+3. GTS/GTB
+
+The coin data and reddit data parts are exposed to the third part 
+(GTS/BTG) as RESTful endpoints which can be queried at any time. All 
+three parts are decoupled. 
+
 ## CoinGecko API
 This project uses the free coin gecko API to retreive information for the crypto currency
 
