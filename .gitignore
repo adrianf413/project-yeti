@@ -2,5 +2,9 @@
 *.docx
 sean_practice.py
 animals.txt
-
-
+textFiles/
+**/Praw/sean_script.py
+**/Praw/sean_script_application.py
+**/Praw/sean_script_application_live.py
+project_yeti.code-workspace
+.vscode/

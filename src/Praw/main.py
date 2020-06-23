@@ -1,10 +1,11 @@
 '''
-This main program calls upon Reddit_Comments.py to get list of organised comment dictionaries
+This main program gets a list of organised comment dictionaries from Reddit_Comments.py  
+that loooks like dict_List = [{submission.title: conversationDict}, ...]
 Iterates through each dictionary to make a text file of comments human readable
 Contractions in the text file are the expanded
 '''
 
-# import Reddit_Comments as Reddit_Comments
+import Reddit_Comments as Reddit_Comments
 import contractions
 import nltk
 from nltk import word_tokenize, sent_tokenize
@@ -20,15 +21,15 @@ tokenisedSent = []
 conversationDictList = []
 dict1 = {}
 dictTitle = 'empty'
+textFileList = []
 
 # This returns the ordered_reddit_comments_dict and prints the thread title
 
 
 def pop_Thread(conversationDictList):
     """This function prints the submission title and returns the corresponding convDict from the """
-
-    # pop the first dictionary element in the list
-    dict1 = conversationDictList.pop()
+    
+    dict1 = conversationDictList.pop() # pop the first dictionary element in the list {submission.title: conversationDict}
 
     # there is only on key in dict1 and it is the submission title
     for key in dict1.keys():
@@ -155,19 +156,20 @@ def main():
                 # print(words)
 
                 '''
-                For now I want to store to types of tokens -
-                a single layered tokenised lsit
+                For now I want to store two types of tokens -
+                a single layered tokenised list
                 a double layered tokenised list, sort of for tokenised sentences
                 '''
                 # tokenisedText is a single layered list of all words, they aren't seperated
                 # for word in words:
                 # tokenisedText.append(word)
 
-                # tokenisedSent is a souble layered list of all sentences, they are seperated
+                # tokenisedSent is a double layered list of all sentences, they are seperated
                 tokenisedSent.append(words)
 
                 '''
-                textFileName = textFile[:10] + '_leemmed_' + '.txt'
+                textFileName = textFile[:10] + '_lemmed_' + '.txt'
+                textFileList.append(textFileName)
                 with open(textFileName, 'a', encoding='utf8') as myfile:
                     for word in words:
                         myfile.write(word + ' ')
@@ -177,8 +179,16 @@ def main():
                 # end of text normalisation, normalised text now stored in a text file
 
         process_sent_content(tokenisedSent)
-        # empty dictionary so loop ends
-        conversationDictList = []
+        
+        conversationDictList = [] # empty dictionary so loop ends
+
+    '''This section of code where will main will call on the classify.py'''
+
+    for myfile in textFileList:
+        with open(myfile, 'r', encoding='utf8') as myfile:
+            print()
+                
+
 
 
 if __name__ == '__main__':
