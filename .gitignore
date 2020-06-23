@@ -8,3 +8,4 @@ textFiles/
 **/Praw/sean_script_application_live.py
 project_yeti.code-workspace
 .vscode/
+src/PRAW/configuration.yaml

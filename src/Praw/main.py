@@ -11,6 +11,7 @@ import nltk
 from nltk import word_tokenize, sent_tokenize
 import normalisation
 from nltk.corpus import state_union
+import sys
 
 # one time download
 # nltk.download('averaged_perceptron_tagger')
@@ -24,7 +25,6 @@ dictTitle = 'empty'
 textFileList = []
 
 # This returns the ordered_reddit_comments_dict and prints the thread title
-
 
 def pop_Thread(conversationDictList):
     """This function prints the submission title and returns the corresponding convDict from the """
@@ -106,8 +106,10 @@ def process_sent_content(tokenizedSent):
 
 def main():
     print("\nmain program\n")
-    # conversationDictList = Reddit_Comments.return_conversation_dict()
+    conversationDictList = Reddit_Comments.return_conversation_dict()
     # print('length of dict list passed into main: {}' .format(len(conversationDictList)))
+
+    sys.exit("Exit")
 
     conversationDictList = ['sample']
 

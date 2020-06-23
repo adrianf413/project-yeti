@@ -7,11 +7,12 @@ it can has a function to return list of several dictionaries full of comments fo
 '''
 import praw
 import json
+import yaml
+import os
 
 dict_List = []
 dict_list_of_1 = []
 conversationDict = {}
-
 
 def make_a_text_file_for_a_submission(title, ups, id, version):
 
@@ -44,12 +45,42 @@ def return_conversation_dict():
     dict_list_of_1.append(dict_List.pop(0))
     return dict_list_of_1
 
+''' As soon as this script is imported as a module by main.py, all this code below executes'''
 
-reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
-                     client_secret='wV7ATmzBZlVnxSok7fIO8FBlyp0',
-                     udername='harkinsean4',
-                     password='1508sh1998Red',
-                     user_agent='CCPB v1.0')
+# set up the read and write directory
+source_dir  = os.path.dirname(os.path.abspath(__file__))
+
+# yaml_dir = os.path.join(source_dir, "..","/") 
+# make a write dir if none exists
+# if not os.path.exists(read_and_write_dir):
+#    os.makedirs(read_and_write_dir)
+
+file_name = "configuration.yaml" # yaml file contains Reddit account information
+yaml_read_location = os.path.join(source_dir, file_name) # specify where to read and write yaml file from
+
+with open(yaml_read_location) as file:
+    # The FullLoader parameter handles the conversion from YAML
+    # scalar values to Python the dictionary format
+    praw_list = yaml.load(file, Loader=yaml.FullLoader)
+
+    print(praw_list) # prints out a dictionary 
+
+    client_id_conf= praw_list['client_id']
+    client_secret_conf= praw_list['client_secret']
+    username_conf= praw_list['username']
+    password_conf= praw_list['password']
+    user_agent_conf= praw_list['user_agent']
+
+if praw_list != None:
+
+    reddit = praw.Reddit(client_id=client_id_conf,
+                        client_secret=client_secret_conf,
+                        username=username_conf,
+                        password=password_conf, 
+                        user_agent=user_agent_conf)
+
+else:
+    print("Error - could not obtain Reddit account details from yaml configuration file")
 
 # Retrive subreddit r/CryptoCurrency
 crypto_subreddit = reddit.subreddit('CryptoCurrency')
@@ -70,37 +101,56 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
             submission.title, submission.ups, submission.id, '1')
         '''
 
+        ''' Interacting with the submission object''''
+
         # replace_more is here because in Reddit there are so many replies
         # to comments that it you must 'load more comments' which is another
         # call to Reddit database, if this happens we don't bother loading them
         submission.comments.replace_more(limit=0)
 
+        # Output all top level comments
+        # for top_level_comment in submission.comments:
+            # print(top_level_comment.body)
+
+            # Output all replies of the particular top_level_comment            
+            # for second_level_comment in top_level_comment.replies:
+                #print(second_level_comment.body)
+
         # gets a flattened list of comments
+        # returns a list of comments traversed in a breadth-frst traversal - i.e. flattened comment list ordered by ranked levels
         comment_list = submission.comments.list()[:100]
 
-        # store comments in a dictionary
+        # store comments in a dictionary -  must loop through the flattened list
         for comment in comment_list:
             if comment.id not in conversationDict:
 
-                # if top level comment
+                # Check it it is a top level comment
                 if comment.is_root is True:
 
-                    # store an array in the conversationDict based on the comment.id key
-                    # this array contains the tl comment body, upvotes and another dictionary
+                    # store an array as the value in the conversationDict based on the comment.id key
+                    # the array contains 
+                    #   index l - top comment's body, 
+                    #   index 2 - top comment's upvotes,
+                    #   index 3 - empty dictionary this top comment's replie
                     conversationDict[comment.id] = [comment.body, comment.ups, {}]
 
                 # if it is a reply
+                # I believe this code does not differentiate between replies of replies
                 if comment.is_root is False:
 
-                    # use comment.parent() to get top comment id
-                    # and use it as a key to find the original top level
-                    # comment - it returns the 'value'  to the key
-                    # which is an array - then specify position 1 -
-                    # a dictionary is stored in position 1, then using the
-                    # reply's comment.id as the key, stored in the value which
-                    # is an array of reply ups and its body
-                    parent = str(comment.parent())
+                    # use comment.parent() to get top comment id and use as key
+                    # to find the original top level comment -
+                    # fetch the 'value'  with this top comment key
+                    # which is an array - then specify position 2 -
+                    # an empty dictionary is stored in position 2, 
+                    # Using the reply's comment.id as the key, 
+                    # store an array which contains 
+                    #   index 1 - reply comment's body, 
+                    #   index 2 - reply comment's ups 
+
+                    parent = str(comment.parent()) # If it is a reply to a comment, it returns the id of the comment it is replying to
                     if parent in conversationDict:
+                        # check to make sure the id of comment treply is too is indeed, a top comment
                         conversationDict[parent][2][comment.id] = [comment.body, comment.ups]
 
         # the following code is replicated in main.py in the function convert_Dict_to_Text_File
