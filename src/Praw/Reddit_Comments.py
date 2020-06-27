@@ -1,17 +1,16 @@
 '''
-This script takes multiple hot thread above 50 upvotes,
-Flattens the list of comments in each thread
-Organises the comments into a dictionary
-Iterates through the dictionary to make a text file of comments human readable
-it can has a function to return list of several dictionaries full of comments for each thread
+This script takes 3 hot submissions/threads above 50 upvotes,
+For each submission it flattens the list of comments 
+and organises the comments into a dictionary
+    make_a_text_file_for_a_submission : - deprecated, done by main.py now
+    return_conversation_dict : returns an array containeing comment dictionaries
 '''
 import praw
 import json
 import yaml
 import os
 
-dict_List = []
-dict_list_of_1 = []
+coment_dict_List_array = []
 conversationDict = {}
 
 def make_a_text_file_for_a_submission(title, ups, id, version):
@@ -39,11 +38,12 @@ def return_conversation_dict():
     submission titles and their conversation dictionarires
     formatted like: {submission.title: conversationDict}
     '''
-    # return dict_List
+    # return coment_dict_List_array - an array of comment dictionaries 
     # for now I only want it to return one dictionary so I'm manipulating the function
-    # to return dict_list_of_1 which is only of size 1
-    dict_list_of_1.append(dict_List.pop(0))
-    return dict_list_of_1
+    # to return dict_list_1 which is only of size 1
+    dict_list_1 = []
+    dict_list_1.append(coment_dict_List_array.pop(0))
+    return dict_list_1
 
 ''' As soon as this script is imported as a module by main.py, all this code below executes'''
 
@@ -182,5 +182,5 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                         replies[reply][0][:200], replies[reply][1]))
         '''
         # append the ordered_reddit_comments_dict to a dict with key as title
-        dict_List.append({submission.title: conversationDict})
+        coment_dict_List_array.append({submission.title: conversationDict})
     conversationDict = {}  # clear conversationDict for thread submission text file

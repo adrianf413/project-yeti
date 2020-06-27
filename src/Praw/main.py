@@ -6,6 +6,7 @@ Contractions in the text file are the expanded
 '''
 
 import Reddit_Comments as Reddit_Comments
+import classify as Classifer
 import contractions
 import nltk
 from nltk import word_tokenize, sent_tokenize
@@ -186,9 +187,11 @@ def main():
 
     '''This section of code where will main will call on the classify.py'''
 
-    for myfile in textFileList:
-        with open(myfile, 'r', encoding='utf8') as myfile:
-            print()
+    print("CLASSIFICATION")
+
+    features = Classifer.find_features(document):
+    classifcation = Classifer.classify(features)
+    
                 
 
 
