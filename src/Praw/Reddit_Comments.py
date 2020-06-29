@@ -138,9 +138,9 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                 # I believe this code does not differentiate between replies of replies
                 if comment.is_root is False:
 
-                    # use comment.parent() to get top comment id and use as key
-                    # to find the original top level comment -
-                    # fetch the 'value'  with this top comment key
+                    # use comment.parent() to get top comment and get its id to use as key
+                    # to find the original top level comment in our dictionary -
+                    # fetch the 'value' with this top comment key
                     # which is an array - then specify position 2 -
                     # an empty dictionary is stored in position 2, 
                     # Using the reply's comment.id as the key, 
@@ -148,10 +148,15 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                     #   index 1 - reply comment's body, 
                     #   index 2 - reply comment's ups 
 
-                    parent = str(comment.parent()) # If it is a reply to a comment, it returns the id of the comment it is replying to
+                    # comment.parent() returns parent comment of reply, 
+                    parent = str(comment.parent()) # surrounding comment.parent() in str() returns id of parent comment is replying to
+
                     if parent in conversationDict:
                         # check to make sure the id of comment treply is too is indeed, a top comment
                         conversationDict[parent][2][comment.id] = [comment.body, comment.ups]
+
+                    else:
+                        print("Could note get the parent of this comment, I'm guessing it's a reply of a reply")
 
         # the following code is replicated in main.py in the function convert_Dict_to_Text_File
         # because this code should only return the dictionary not make text files!
