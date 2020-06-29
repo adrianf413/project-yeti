@@ -5,6 +5,7 @@ Iterates through each dictionary to make a text file of comments human readable
 Contractions in the text file are the expanded
 '''
 
+from ClassifierTraining.sentiment_mod import VoteClassifier
 import Reddit_Comments as Reddit_Comments
 import classify as Classifer
 import contractions
@@ -13,6 +14,8 @@ from nltk import word_tokenize, sent_tokenize
 import normalisation
 from nltk.corpus import state_union
 import sys
+import os
+import pickle 
 
 # one time download
 # nltk.download('averaged_perceptron_tagger')
@@ -28,7 +31,8 @@ textFileList = []
 # This returns the ordered_reddit_comments_dict and prints the thread title
 
 def pop_Thread(conversationDictList):
-    """This function prints the submission title and returns the corresponding convDict from the """
+    """This function takes in an array of conversation dictionaries, it pops the top one from the list
+     and prints the submission title and returns the corresponding convDict from the """
     
     dict1 = conversationDictList.pop() # pop the first dictionary element in the list {submission.title: conversationDict}
 
@@ -44,7 +48,7 @@ def pop_Thread(conversationDictList):
 
 def convert_Dict_to_Text_File(dictionary, dictTitle):
     """Pass in dictionary and it's title, then output dictionary contents to a text file"""
-    textFileName = dictTitle[:10] + '.txt'
+    textFileName = dictTitle[:15] + '.txt'
 
     with open(textFileName, 'w+', encoding='utf8') as myfile:
         myfile.seek(0)
@@ -71,6 +75,7 @@ def convert_Dict_to_Text_File(dictionary, dictTitle):
                 #    replies[reply][0][:200], replies[reply][1]))
                 my_file.write("\t\nreply: {} \nupvotes: {}\n" .format(
                     replies[reply][0][:200], replies[reply][1]))
+
     return textFileName
 
 
@@ -107,94 +112,93 @@ def process_sent_content(tokenizedSent):
 
 def main():
     print("\nmain program\n")
-    conversationDictList = Reddit_Comments.return_conversation_dict()
-    # print('length of dict list passed into main: {}' .format(len(conversationDictList)))
+    conversationDictList = Reddit_Comments.return_conversation_dict() # retrieves an array of conversation dictionaries
+    print('length of dict list passed into main: {}' .format(len(conversationDictList)))
 
-    sys.exit("Exit")
+    # set up the read and write directory
+    source_dir = os.path.dirname(os.path.abspath(__file__))
 
-    conversationDictList = ['sample']
+    conversationDictList = conversationDictList[:1] # only want to look at first entry
 
     while conversationDictList:
         print('\n\n'+'loop'+'\n\n')
-        # dictTitle, dictionary = pop_Thread(conversationDictList)
-        # print('Working with: ' + dictTitle)
+        dictTitle, conversation_dictionary = pop_Thread(conversationDictList) # pass in array of threads pop first thread in array's conversation dictionary  
+        print('Working with: ' + dictTitle)
 
-        # textFile = convert_Dict_to_Text_File(dictionary, dictTitle)
-        textFile = 'textFiles/Where shou1.txt'
+        textFileName = convert_Dict_to_Text_File(conversation_dictionary, dictTitle) # writes the dictionary as a text file
 
-        # open the text file - then read in all the lines of text, and nromalise each line
-        with open(textFile, 'r', encoding='utf8') as my_file:
-            for line in my_file.readlines():
-                text = replace_contractions(line)
+        textFileName = textFileName[:-4] # remove the last 4 characters i.e. '.txt' 
+        textFileName = textFileName + '.pickle'
 
-                # TOKENISATION
-                # We tokenise each line of text one at a time
-                # return a python array list of words
-                words = nltk.word_tokenize(text)
-                # print(words)
+        # save the pickled convercstion dictionary file
+        ConvDict_read_location = os.path.join(source_dir, "ConversationDictionaries") 
+        # file_name = "voted_classifier.pickle" 
+        conv_dict_f = open(os.path.join(ConvDict_read_location, textFileName), "wb")
+        pickle.dump(conversation_dictionary, conv_dict_f) 
+        conv_dict_f.close()
 
-                # NORMALISATION
-                # removes non-ascii character such as: emojis, '”',
-                words = normalisation.remove_non_ascii(words)
+        sys.exit()
 
-                # Convert all characters to lowercase from list of tokenized words
-                words = normalisation.to_lowercase(words)
+        # open the pickled convercstion dictionary file
+        ConvDict_read_location = os.path.join(source_dir, "ConversationDictionaries") 
+        # file_name = "voted_classifier.pickle" 
+        conv_dict_f = open(os.path.join(ConvDict_read_location, textFileName), "rb")
+        conv_dict = pickle.load(conv_dict_f) 
+        conv_dict_f.close()
 
-                # removes punctuation such as: ':' '.' ',' '-' '?' '&' '#' ';' '/' '()' '[]'
-                # if it is the middle of a word e.g. ['main.py'] -> ['mainpy']
-                words = normalisation.remove_punctuation(words)
+        # NORMALISATION PROCESS
 
-                # convert integers representation to text
-                # words = normalisation.replace_numbers(words)
+        # conversationDict[comment.id] = [comment.body, comment.ups, {}]
+        for key, entry in conversation_dictionary:
+            # loop through each top level comment in dictionary and nromalise the body
 
-                # remove stop words such as:
-                words = normalisation.remove_stopwords(words)
+            text = replace_contractions(entry[0])
 
-                # Stem the words
-                # words = normalisation.stem_words(words)
-                # print(words)
+            # TOKENISATION
+            # We tokenise each line of text one at a time
+            # return a python array list of words
+            words = nltk.word_tokenize(text)
+            # print(words)
 
-                # Lem the verbs
-                words = normalisation.lemmatize_verbs(words)
-                # print(words)
+            # NORMALISATION
+            # removes non-ascii character such as: emojis, '”',
+            words = normalisation.remove_non_ascii(words)
 
-                '''
-                For now I want to store two types of tokens -
-                a single layered tokenised list
-                a double layered tokenised list, sort of for tokenised sentences
-                '''
-                # tokenisedText is a single layered list of all words, they aren't seperated
-                # for word in words:
-                # tokenisedText.append(word)
+            # Convert all characters to lowercase from list of tokenized words
+            words = normalisation.to_lowercase(words)
 
-                # tokenisedSent is a double layered list of all sentences, they are seperated
-                tokenisedSent.append(words)
+            # removes punctuation such as: ':' '.' ',' '-' '?' '&' '#' ';' '/' '()' '[]'
+            # if it is the middle of a word e.g. ['main.py'] -> ['mainpy']
+            words = normalisation.remove_punctuation(words)
 
-                '''
-                textFileName = textFile[:10] + '_lemmed_' + '.txt'
-                textFileList.append(textFileName)
-                with open(textFileName, 'a', encoding='utf8') as myfile:
-                    for word in words:
-                        myfile.write(word + ' ')
-                    myfile.write('\n')
-                    # simplejson.dump(words, myfile)
-                '''
-                # end of text normalisation, normalised text now stored in a text file
+            # convert integers representation to text
+            # words = normalisation.replace_numbers(words)
 
-        process_sent_content(tokenisedSent)
-        
-        conversationDictList = [] # empty dictionary so loop ends
+            # remove stop words such as:
+            words = normalisation.remove_stopwords(words)
+
+            # Stem the words
+            # words = normalisation.stem_words(words)
+            # print(words)
+
+            # Lem the verbs
+            # words = normalisation.lemmatize_verbs(words)
+            # print(words)
+
+        # process_sent_content(tokenisedSent) # method is meant to identify NOUN and ADJ but I never used it
 
     '''This section of code where will main will call on the classify.py'''
 
     print("CLASSIFICATION")
 
-    features = Classifer.find_features(document):
+    for key, entry in conversation_dictionary:
+        # loop through each top level comment in dictionary and nromalise the body
+
+        comment_body = entry[0] 
+
+        features = find_features(document)
+
     classifcation = Classifer.classify(features)
     
-                
-
-
-
 if __name__ == '__main__':
     main()

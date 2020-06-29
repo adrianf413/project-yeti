@@ -3,7 +3,7 @@ This script takes 3 hot submissions/threads above 50 upvotes,
 For each submission it flattens the list of comments 
 and organises the comments into a dictionary
     make_a_text_file_for_a_submission : - deprecated, done by main.py now
-    return_conversation_dict : returns an array containeing comment dictionaries
+    return_conversation_dict : returns an array containing comment dictionaries
 '''
 import praw
 import json
@@ -101,7 +101,7 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
             submission.title, submission.ups, submission.id, '1')
         '''
 
-        ''' Interacting with the submission object''''
+        ''' Interacting with the submission object'''
 
         # replace_more is here because in Reddit there are so many replies
         # to comments that it you must 'load more comments' which is another

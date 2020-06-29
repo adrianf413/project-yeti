@@ -2,25 +2,28 @@
 
 '''
 
+from ClassifierTraining.sentiment_mod import VoteClassifier
 import os
 import pickle
+import sys
 from nltk import word_tokenize
 
 # set up the read and write directory
-source_dir  = os.path.dirname(os.path.abspath(__file__))
+source_dir = os.path.dirname(os.path.abspath(__file__))
 
-Pickles_read_location = os.path.join(source_dir, "Pickles") 
+# open the pickled word_features file
+Pickles_read_location = os.path.join(source_dir, "Classifiers") 
 file_name = "word_features.pickle" 
 word_features_f = open(os.path.join(Pickles_read_location, file_name), "rb")
-word_features = pickle.load(word_features_f)                                            # UNUSED
+word_features = pickle.load(word_features_f)                                           
 word_features_f.close()
 
-Classifier_read_location = os.path.join(source_dir, "Pickles/Classifiers") 
+# open the pickled voted_classifier file
+Classifier_read_location = os.path.join(source_dir, "Classifiers") 
 file_name = "voted_classifier.pickle" 
 voited_classifier_f = open(os.path.join(Classifier_read_location, file_name), "rb")
 voited_classifier = pickle.load(voited_classifier_f) 
 voited_classifier_f.close()
-
 
 def classify(features):
 
