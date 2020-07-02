@@ -1,6 +1,6 @@
 *.pyc
 *.docx
-sean_practice.py
+dict_and_arrays_practice.py
 animals.txt
 textFiles/
 **/Praw/sean_script.py
@@ -9,3 +9,5 @@ textFiles/
 project_yeti.code-workspace
 .vscode/
 src/PRAW/configuration.yaml
+src/PRAW/TextFiles
+src/PRAW/TextClassifier/ClassifierTraining

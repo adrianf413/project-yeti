@@ -156,8 +156,7 @@ def main():
             score = score - 1
         elif classifcation == 'pos':
             score = score + 1
-
-        print("{}\n".format(classifcation))
+z
 
     print("\n\n Thread Score {}\n".format(score))
 
