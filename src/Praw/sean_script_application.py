@@ -8,6 +8,8 @@ make a file called comments.txt
 '''
 import praw
 import json
+import os 
+import yaml
 
 conversationDict = {}
 
@@ -16,7 +18,7 @@ def make_a_text_file_for_a_submission(title, ups, id, version):
 
     textFileName = title[:10] + version + '.txt'
 
-    with open(textFileName, 'w+') as myfile:
+    with open(textFileName, 'w+', encoding='utf8') as myfile:
         myfile.seek(0)
 
         myfile.write('Thread Title: ')
@@ -30,11 +32,31 @@ def make_a_text_file_for_a_submission(title, ups, id, version):
     return textFileName
 
 
-reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
-                     client_secret='wV7ATmzBZlVnxSok7fIO8FBlyp0',
-                     udername='harkinsean4',
-                     password='1508sh1998Red',
-                     user_agent='CCPB v1.0')
+file_name = "configuration.yaml" # yaml file contains Reddit account information
+yaml_read_location = os.path.join(source_dir, file_name) # specify where to read and write yaml file from
+
+with open(yaml_read_location) as file:
+    # The FullLoader parameter handles the conversion from YAML
+    # scalar values to Python the dictionary format
+    praw_list = yaml.load(file, Loader=yaml.FullLoader)
+
+    print(praw_list) # prints out a dictionary 
+
+    client_id_conf= praw_list['client_id']
+    client_secret_conf= praw_list['client_secret']
+    username_conf= praw_list['username']
+    password_conf= praw_list['password']
+    user_agent_conf= praw_list['user_agent']
+
+if praw_list != None:
+
+    print("signing in")
+
+    reddit = praw.Reddit(client_id=client_id_conf,
+                        client_secret=client_secret_conf,
+                        username=username_conf,
+                        password=password_conf, 
+                        user_agent=user_agent_conf)
 
 # Retrive subreddit r/CryptoCurrency
 crypto_subreddit = reddit.subreddit('CryptoCurrency')
@@ -72,7 +94,7 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                     # this array contains the cmment body, upvotes and another dictionary
                     conversationDict[comment.id] = [comment.body, comment.ups, {}]
 
-                    with open(textFileName, 'a') as myfile:
+                    with open(textFileName, 'a', encoding='utf8') as myfile:
 
                         myfile.write('Top Level comment: ')
                         myfile.write('{} {} \n' .format(json.dumps(
@@ -92,7 +114,7 @@ for submission in hot_crypto:  # submissions are the subreddit threads, they are
                     if parent in conversationDict:
                         conversationDict[parent][2][comment.id] = [comment.body, comment.ups]
 
-                    with open(textFileName, 'a') as myfile:
+                    with open(textFileName, 'a', encoding='utf8') as myfile:
 
                         myfile.write('{} Reply to parent comment {}: ' .format('\t', parent))
                         myfile.write('{} {} \n' .format(json.dumps(

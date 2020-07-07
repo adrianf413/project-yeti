@@ -7,15 +7,36 @@ But we only are allowed 30 API calls / minute
 '''
 from os import sys
 import praw
-
+import os 
+import yaml
 
 def main():
 
-    reddit = praw.Reddit(client_id='txRrFGuKPeDnSw',
-                         client_secret='wV7ATmzBZlVnxSok7fIO8FBlyp0',
-                         udername='harkinsean4',
-                         password='1508sh1998Red',
-                         user_agent='CCPB v1.0')
+    file_name = "configuration.yaml" # yaml file contains Reddit account information
+    yaml_read_location = os.path.join(source_dir, file_name) # specify where to read and write yaml file from
+
+    with open(yaml_read_location) as file:
+        # The FullLoader parameter handles the conversion from YAML
+        # scalar values to Python the dictionary format
+        praw_list = yaml.load(file, Loader=yaml.FullLoader)
+
+        print(praw_list) # prints out a dictionary 
+
+        client_id_conf= praw_list['client_id']
+        client_secret_conf= praw_list['client_secret']
+        username_conf= praw_list['username']
+        password_conf= praw_list['password']
+        user_agent_conf= praw_list['user_agent']
+
+    if praw_list != None:
+
+        print("signing in")
+
+        reddit = praw.Reddit(client_id=client_id_conf,
+                            client_secret=client_secret_conf,
+                            username=username_conf,
+                            password=password_conf, 
+                            user_agent=user_agent_conf)
 
     # Retrive subreddit r/CryptoCurrency
     crypto_subreddit = reddit.subreddit('CryptoCurrency')  # this is the subreddit
