@@ -1,11 +1,13 @@
 '''
 This main program gets a list of organised comment dictionaries from Reddit_Comments.py  
 that loooks like dict_List = [{submission.title: conversationDict}, ...]
-Iterates through each dictionary to make a text file of comments human readable
-Contractions in the text file are the expanded
+
+This main program reads from a file a conversation dictionary - vulnerability d.pickle
+it tokenise and normalises each comment, then rejoins tokensised words to make comment sentence
+Vote Classifer checks what features in comment are present then classifies
 '''
 
-from ClassifierTraining.sentiment_mod import VoteClassifier
+from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier 
 import classify as Classifer
 import contractions
 import normalisation
@@ -68,6 +70,8 @@ def replace_contractions(text):
     """Replace contractions in string of text"""
     return contractions.fix(text)
 
+'''Main reads in a conversation dictionary '''
+
 def main():
 
     # set up the read and write directory
@@ -76,7 +80,7 @@ def main():
     textFileName = 'Vulnerability d.pickle'
 
     # open the pickled convercstion dictionary file
-    ConvDict_read_location = os.path.join(source_dir, "ConversationDictionaries") 
+    ConvDict_read_location = os.path.join(source_dir, "TextFiles", "ConversationDictionaries") 
     # file_name = "voted_classifier.pickle" 
     conv_dict_f = open(os.path.join(ConvDict_read_location, textFileName), "rb")
     conv_dict = pickle.load(conv_dict_f) 
@@ -87,13 +91,14 @@ def main():
     # NORMALISATION PROCESS
 
     i = 0 
-    sentiment_set = {}
+    sentiment_set = {} # this is a dictionary containing every single normalised comment
 
-    # conversationDict[comment.id] = [comment.body, comment.ups, {}]
+    # contents --> conversationDict[comment.id] = [comment.body, comment.ups, {}]
     for key, entry in conv_dict.items():
         
+        #print out first 2 for debugging
         if i < 2:
-            print(entry[0])
+            print(entry[0]) # entry[0] is comment.body
 
         # loop through each top level comment in dictionary and nromalise the body
 
@@ -123,12 +128,12 @@ def main():
         words = normalisation.remove_stopwords(words)
 
         if i < 2:
-            print(words)
-            i = i +1
+            print(words) # comment.body is now words
+            i = i + 1
 
-        comment_body = ' '.join(words)
+        comment_body = ' '.join(words) # words are a tokenised list so rejoin as a sentence into comment_body
 
-        sentiment_set[key] = [comment_body, words]
+        sentiment_set[key] = [comment_body, words] # comment_body is a normlasied sentence, words are tokenised as a list
 
     '''This section of code where will main will call on the classify.py'''
 
@@ -142,24 +147,22 @@ def main():
         # loop through each top level comment in dictionary and nromalise the body
 
         comment_body = entry[0] 
-        print(comment_body)
+        print(comment_body)                               # print normalsied sentence
 
-        features = Classifer.find_features(comment_body)
+        features = Classifer.find_features(comment_body)  # returns a dictionary telling us what 5000 words are present
 
         if i < 2:
             print("Check comment features: {}".format(features['exists']))
             i = i + 1
 
-        classifcation = Classifer.classify(features)
+        classifcation = Classifer.classify(features)    
 
         if classifcation == 'neg':
             score = score - 1
         elif classifcation == 'pos':
             score = score + 1
-z
 
     print("\n\n Thread Score {}\n".format(score))
-
 
 if __name__ == '__main__':
     main()

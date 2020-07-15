@@ -2,7 +2,7 @@
 
 '''
 
-from ClassifierTraining.sentiment_mod import VoteClassifier
+from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier
 import os
 import pickle
 import sys
@@ -12,14 +12,14 @@ from nltk import word_tokenize
 source_dir = os.path.dirname(os.path.abspath(__file__))
 
 # open the pickled word_features file
-Pickles_read_location = os.path.join(source_dir, "Classifiers") 
+Pickles_read_location = os.path.join(source_dir, "TextClassifier", "Classifiers") 
 file_name = "word_features.pickle" 
 word_features_f = open(os.path.join(Pickles_read_location, file_name), "rb")
 word_features = pickle.load(word_features_f)                                           
 word_features_f.close()
 
 # open the pickled voted_classifier file
-Classifier_read_location = os.path.join(source_dir, "Classifiers") 
+Classifier_read_location = os.path.join(source_dir, "TextClassifier", "Classifiers") 
 file_name = "voted_classifier.pickle" 
 voited_classifier_f = open(os.path.join(Classifier_read_location, file_name), "rb")
 voited_classifier = pickle.load(voited_classifier_f) 
