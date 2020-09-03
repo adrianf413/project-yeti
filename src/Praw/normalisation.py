@@ -127,3 +127,31 @@ def lemmatize_verbs(words):
         lemma = lemmatizer.lemmatize(word, pos='v')
         lemmas.append(lemma)
     return lemmas
+
+# this is chunking but I used once ages ago and sacked it, could be useful once i learn how to preoperly use it 
+'''
+def process_sent_content(tokenizedSent):
+    try:
+        for sentence in tokenizedSent:
+            # check list contains something
+            if sentence:
+                tagged = nltk.pos_tag(sentence, tagset='universal')
+
+            # <RB.?> --> '.' means any character and combined with '?' for no more than 0 to 1 characters
+            # chunkGram = r"""Chunk: {<RB.?>*<VB.?>*<NNP>+<NN>?}"""
+            chunkGram = r"""Chunk: {<ADJ.?>*<ADV.?>*<VERB.?>*<NOUN>+<NOUN>?}"""
+            chunkGramNum = r"""Chunk: {<ADJ.?>*<ADV.?>*<VERB.?>*<NOUN>+<NOUN>?<VERB.?>+<NUM.?>?}"""
+
+            
+            #top=ADJ, level=NOUN, comment=NOUN, sometimes upvotes is a VERB or NOUN
+            
+
+            chunkParser = nltk.RegexpParser(chunkGramNum)
+            chunked = chunkParser.parse(tagged)
+
+            print(chunked)
+            # chunked.draw()
+
+    except Exception as e:
+        print(str(e))
+'''

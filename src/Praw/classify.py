@@ -1,5 +1,12 @@
 '''
+This script classify.py encapsulates the functions of the Voted_Classifer and processes a Reddit comment so it is ready to be classified
+It will be used by main.py ->(currently being test in main_classify_test.py)
 
+The module does the following does the following
+ 1. when imported it automatically reads in 
+    a. word_features.pickle - 5000 most common words based on training that classifier checks for 
+    b. voted_classifier.pickle - the pickled classifer 
+ 2. 
 '''
 
 from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier
@@ -29,15 +36,19 @@ def classify(features):
 
     classification = voited_classifier.classify(features)
 
-    # confidence = voited_classifier.confidence()
-
     return classification
+
+def confidence(features):
+
+    confidence = voited_classifier.confidence(features) # returns a percentae confidence
+
+    return confidence
 
 def find_features(document):
     '''
-    - document is a python list of all words in a single Reddit thread
-    - word_features is a python list of 5000 most common words/features used in movie reviews
-    find_features is responsible for making feature_sets
+    - document is a python list of all words in a single moview review
+    - word_features is a python list of 5000 most common words/features used in Twitter movie reviews
+    find_features is responsible for retruning dictionaries that go into making feature_sets
     the method returns a dictionary containing words as keys with boolean signalling 
     if word in document is one of 5000 most common words
     '''
