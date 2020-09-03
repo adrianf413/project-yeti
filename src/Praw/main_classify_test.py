@@ -1,14 +1,11 @@
 '''
-This main program gets a list of Reddit threads and their organised comment dictionaries from Reddit_Comments.py  
-that loooks like conversationDictList = [{submission.title: conversationDict}, ...]
-
 This main program reads from a file a conversation dictionary - vulnerability d.pickle
-it tokenise and normalises each comment, then rejoins tokensised words to make comment sentence
+it tokenises and normalises each comment, then rejoins tokensised words to make comment sentence
 Vote Classifer checks what features in comment are present then classifies
 
 INPUT 
-conversationDictList --> = [{submission.title: conversationDict}, ...]
-    conversationDict --> = conversationDict[comment.id] = [comment.body, comment.ups, repliesDictionary] 
+conversationDictList --> = [{submission.title: conv_dict}, ...]
+    conv_dict --> = conv_dict[comment.id] = [comment.body, comment.ups, repliesDictionary] 
     
 '''
 

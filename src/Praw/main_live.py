@@ -149,7 +149,7 @@ def main():
 
         top_level_comment = normalisation.replace_contractions(comment.body)
 
-        if "I am a bot" in text:
+        if "I am a bot" in top_level_comment:
             print("Ignore bot comment")
             continue
             # make sure coment is not a bot moderator 
