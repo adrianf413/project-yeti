@@ -1,7 +1,6 @@
 '''
-This is the script for finding and storuing 
-coin data for the previous 24 hours upon 
-initial start up.
+This is the service for finding and storuing 
+coin data for the previous 24 hours accessible by HTTP
 '''
 
 from pycoingecko import CoinGeckoAPI
@@ -9,7 +8,7 @@ import datetime
 import time
 import json
 import logging
-from coin import Coin
+from coin import Coin, Coin_Historical
 
 # Set the logging congfiguration
 logging.basicConfig(filename='CCPB.log', level=logging.INFO, filemode='w', format='[%(asctime)s][%(name)-12s][%(levelname)-4s] %(message)s', datefmt='%d-%m-%Y %H:%M:%S')
@@ -18,28 +17,29 @@ cg = CoinGeckoAPI()
 # List used to store objects that will hold the prices
 # For the last 24 hours. 
 coin_history_objects = []
-coin_storage = open("12hourstorage.txt", 'w+')
+#coin_storage = open("12hourstorage.json", 'w+')
 
-def initiate_coin_history(coin_id_list):
+def initiate_coin_data_list(coin_id_list):
     # Getting and storing the price every minute for 24 hours
     counter = 0
-    logging.info("Starting to store coin data every minute")
-    while counter < (24*60):
-        if datetime.datetime.now().second == 0:
-            for i in coin_id_list:
-                try:
-                    current_time = datetime.datetime.now()
-                    time_value = current_time.strftime('%H:%M')
-                    price = cg.get_price(i, 'eur')
-                    temp_coin_object = Coin(i, price)
-                    temp_coin_object.timestamp = time_value
-                    # storing list of Coin objects
-                    coin_history_objects.append(temp_coin_object)
-                except:
-                    logging.error("Error initiating coin information for " + i)
-            counter = counter + 1
-            logging.info("Finished storing coins for this minute")
+    logging.info("Setting up coin data object list")
+    start_time = datetime.datetime(year=2020, month = 8, day = 3, hour=0, minute=0)
+    minute_count = 1440
+    for time_stamp in (start_time + datetime.timedelta(minutes=n) for n in range(minute_count)):
+        #print(time_stamp.strftime('%H:%M'))
+        timestamp_key = time_stamp.strftime('%H:%M')
+        for i in coin_id_list:
+            try:
+                #price = cg.get_price(i, 'eur')
+                price = 1
+                temp_coin_object = Coin_Historical(i, price, timestamp_key)
+                coin_history_objects.append(temp_coin_object)
+            except Exception as e:
+                logging.error("Error initiating coin information for " + i)
+                logging.error(e)
+    
     logging.info("Completed initiatie coins function")
+
 
 # Method to populate the current price attribute of the coin objects
 def get_current_price(id):
@@ -58,13 +58,14 @@ def get_one_minute_percentage(id, current_price):
     for q in coin_history_objects:
         if q.id == id and q.timestamp == key_value:
             value = ((current_price/q.price)-1) * 100
-            print(value)
+            #print(value)
             if value != None:
                 return value
             else:
+                logging.error("Error getting one minute percentage")
                 return 0
-        else:
-            return 0
+        #else:
+        #    return 0
     
             
 def get_ten_minute_percentage(id, current_price):
@@ -78,8 +79,6 @@ def get_ten_minute_percentage(id, current_price):
                 return value
             else:
                 return 0
-        else:
-            return 0
 
 def get_thirty_minute_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -92,8 +91,7 @@ def get_thirty_minute_percentage(id, current_price):
                 return value
             else:
                 return 0
-        else:
-            return 0
+    
 
 def get_one_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -106,8 +104,7 @@ def get_one_hour_percentage(id, current_price):
                 return value
             else:
                 return 0
-        else:
-            return 0
+        
 
 def get_six_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -120,8 +117,7 @@ def get_six_hour_percentage(id, current_price):
                 return value
             else:
                 return 0
-        else:
-            return 0
+        
 
 def get_twelve_hour_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -134,8 +130,7 @@ def get_twelve_hour_percentage(id, current_price):
                 return value
             else:
                 return 0
-        else:
-            return 0
+        
 
 def get_one_day_percentage(id, current_price):
     current_time = datetime.datetime.now()
@@ -175,13 +170,39 @@ def get_one_month_percentage(id, current_price):
 
 # This method will find the price for a specific time 24
 # hours ago, and replace it with the new price
-def update_recent_prices(time):
+def update_recent_prices(time, id):
     for i in coin_history_objects:
-        if i.timestamp == time:
-            print("Old price = " + str(i.price))
+        if i.timestamp == time and i.id == id:
+            print(id, " - Old price = " + str(i.price))
             # Rewriting old time with new time. 
             logging.info("Rewriting old data with new data")
             new_price = cg.get_price(i.id, 'eur')
             i.price = new_price[i.id]['eur']
             print("New price = " + str(i.price))
 
+
+def main():
+    coin_id_list = ['bitcoin', 'bitcoin-cash', 'ethereum', 'litecoin', 'ripple', 'eos',
+                    'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
+                    'dogecoin']
+    initiate_coin_data_list(coin_id_list)
+    return
+    while True:
+        update = True
+        while update:
+
+            if datetime.datetime.now().second == 0:
+
+                time = datetime.datetime.now()
+                time_to_update = time.strftime('%H:%M')
+                try:
+                    update_recent_prices(time_to_update)
+                except:
+                    logging.error("Error updating coin history for this minute")
+                
+                updare_file_store()
+                update = False
+
+
+if __name__ == "__main__":
+    main()

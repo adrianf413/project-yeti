@@ -7,7 +7,4 @@ ADD Application.py Application.py
 ADD coin.py coin.py
 ADD recent_history.py recent_history.py
 
-EXPOSE 5001
-
 CMD [ "python3", "./Application.py" ]
-CMD [ "python3", "./crypto_api.py"]

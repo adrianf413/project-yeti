@@ -26,10 +26,3 @@ class Coin:
         self.one_week_percentage = 0
         self.one_month_percentage = 0
         self.currently_bought = False
-
-
-class Coin_Historical:
-    def __init__(self, id, price, timestamp):
-        self.id = id
-        self.price = price
-        self.timestamp = timestamp
