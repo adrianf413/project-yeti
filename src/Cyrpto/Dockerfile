@@ -11,4 +11,4 @@ ADD start.sh start.sh
 
 EXPOSE 5001
 
-CMD python Application.py & crypto_api.py
+CMD python3 Application.py & python3 crypto_api.py
