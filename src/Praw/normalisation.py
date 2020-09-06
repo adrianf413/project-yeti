@@ -9,11 +9,24 @@ from nltk.stem import LancasterStemmer, WordNetLemmatizer  # PorterStemmer
 import nltk
 import contractions
 
+coin_list = ["bitcoin", "btc", "ethereum", "eth", "ether", "tether", "usdt", "ripple", "xrp", "litecoin", "ltc", "binance", "bnb", "bitcoin cash", "bch", "libra"]
+
 # these are one time donwloads below
 # nltk.download("stopwords")
 # nltk.download('punkt')
 # nltk.download('wordnet')
 
+def find_coin(words):
+
+    coin_comment = []
+
+    for word in words:
+        word = word.lower()
+
+        if word in coin_list:      # is the word a coin
+            coin_comment.append(word)
+            
+    return coin_comment
 
 def remove_non_ascii(words):
     """Remove non-ASCII characters from list of tokenized words"""
@@ -24,7 +37,7 @@ def remove_non_ascii(words):
         new_words.append(new_word)
     return new_words
 
-
+# already called in remove_nouns
 def to_lowercase(words):
     """Convert all characters to lowercase from list of tokenized words"""
     new_words = []
@@ -98,7 +111,7 @@ def remove_nouns(words):
 
     for _tuple in POS:
         if _tuple[1][0] in allowed_word_types:      # looks for the first letter in of word tag
-            new_words.append(_tuple[0].lower())
+            new_words.append(_tuple[0].lower())     # makes word lowercase
     
     return new_words
 
