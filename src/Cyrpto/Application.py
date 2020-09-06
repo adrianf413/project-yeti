@@ -107,14 +107,21 @@ def main():
                 logging.info("Updating coin information for this minute")
                 time = datetime.datetime.now()
                 time_to_update = time.strftime('%H:%M')
-                for id in coin_id_list:
+                for coin_id in coin_id_list:
                     try:
-                        rh.update_recent_prices(time_to_update, id)
+                        rh.update_recent_prices(time_to_update, coin_id)
                     except Exception as e:
                         logging.error("Error updating coin history for this minute")
                         logging.info(e)
                 update = False
-        update_coin_data_file(coin_id_list)
+        
+        
+        # Now need to update the file with the newest coin data 
+        try:
+            update_coin_data_file(coin_id_list)
+        except Exception as e:
+            logging.error("Error updating coin data in JSON file")
+            logging.error(e)
         logging.info("Finished updating stored data for each coin")
         gts_gtb_list.clear()
 
