@@ -175,7 +175,7 @@ def update_recent_prices(time, id):
         if i.timestamp == time and i.id == id:
             print(id, " - Old price = " + str(i.price))
             # Rewriting old time with new time. 
-            logging.info("Rewriting old data with new data")
+            #logging.info("Rewriting old data with new data")
             new_price = cg.get_price(i.id, 'eur')
             i.price = new_price[i.id]['eur']
             print("New price = " + str(i.price))

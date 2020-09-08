@@ -29,7 +29,7 @@ def setup_coin_data_file(coin_id_list):
         coin_history_objects.append(Coin(coin, price))
     
     json_string = json.dumps([ob.__dict__ for ob in coin_history_objects])
-    print(json_string)
+    #print(json_string)
     coin_storage.write(json_string)
     coin_storage.close()
 
@@ -39,8 +39,10 @@ def update_coin_data_file(coin_id_list):
     coin_history_objects.clear()
     for coin in coin_id_list:
         #print(coin)
-        d_price = cg.get_price(coin, 'eur')
+        d_price = cg.get_price(coin, 'eur', include_market_cap='true', include_24hr_vol='true')
         price = d_price[coin]['eur']
+        marketcap = d_price[coin]['eur_market_cap']
+        volume =  d_price[coin]['eur_24h_vol']
         #print(price)
         temp_coin = Coin(coin, d_price)
         #print(rh.get_one_minute_percentage(coin, price))
@@ -53,11 +55,13 @@ def update_coin_data_file(coin_id_list):
         temp_coin.one_day_percentage = rh.get_one_day_percentage(coin, price)
         temp_coin.one_week_percentage = rh.get_one_week_percentage(coin, price)
         temp_coin.one_month_percentage = rh.get_one_month_percentage(coin, price)
-        temp_coin.timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+        temp_coin.timestamp = datetime.datetime.now().strftime("%d/%m/%Y  %H:%M:%S")
+        temp_coin.volume = volume
+        temp_coin.market_cap = marketcap
         coin_history_objects.append(temp_coin)
     
     json_string = json.dumps([ob.__dict__ for ob in coin_history_objects])
-    print(json_string)
+    #print(json_string)
     
     coin_storage = open("12hourstorage.json", 'w')
     coin_storage.write(json_string)
@@ -122,6 +126,7 @@ def main():
         except Exception as e:
             logging.error("Error updating coin data in JSON file")
             logging.error(e)
+            
         logging.info("Finished updating stored data for each coin")
         gts_gtb_list.clear()
 

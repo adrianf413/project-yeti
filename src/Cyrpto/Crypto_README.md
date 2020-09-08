@@ -23,7 +23,7 @@ Uses python Flask to expose the coin data in the file as a REST API, acessible t
 
 Example usage:
 
-request: http://127.0.0.1:5001/coin_data/history?name=bitcoin
+request: http://127.0.0.1:5001/api/coin_data/history?name=bitcoin
 
 response: 
 {

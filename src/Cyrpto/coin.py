@@ -25,6 +25,8 @@ class Coin:
         self.one_day_percentage = 0
         self.one_week_percentage = 0
         self.one_month_percentage = 0
+        self.volume = 0
+        self.market_cap = 0
         self.currently_bought = False
 
 
