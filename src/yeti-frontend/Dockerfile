@@ -1,6 +1,6 @@
 FROM python:3
 
-RUN pip install pycoingecko flask requests
+RUN pip install pycoingecko flask requests flask_bootstrap
 
 ADD /img /img
 ADD /static /static
