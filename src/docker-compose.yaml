@@ -2,12 +2,12 @@ version: "3.7"
 services: 
   nginx: 
     build: ./nginx/ 
-    container_name: nginx 
+    container_name: nginxtest 
     ports: 
       - "80:80"
   crypto_api:
     build: ./Cyrpto/
-    container_name: crypto_rest_api
+    container_name: crypto_rAPI
     ports: 
       - "5005:5001"
   frontend:
