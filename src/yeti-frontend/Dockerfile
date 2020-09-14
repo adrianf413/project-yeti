@@ -6,7 +6,7 @@ ADD /img /img
 ADD /static /static
 ADD /templates /templates
 ADD coin.py coin.py 
-ADD yeti_frontend.py yeti_frontend,py 
+ADD yeti_frontend.py yeti_frontend.py 
 
 EXPOSE 5002
 
