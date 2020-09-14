@@ -7,7 +7,7 @@ import os
 from coin import Coin
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+#app.config["DEBUG"] = True
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 bootstrap = Bootstrap(app)
 
@@ -102,5 +102,5 @@ def return_specific_coin_values():
 
     return flask.render_template('coin.html', coins = coin_objects, display=name)
 
-app.run(host='0.0.0.0', port=int(5002))
+app.run(host='0.0.0.0', port=int(5011))
 
