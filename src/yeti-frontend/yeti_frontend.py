@@ -3,6 +3,7 @@ from flask import request, jsonify, abort, render_template
 from flask_bootstrap import Bootstrap
 import json
 import requests
+import os
 from coin import Coin
 
 app = flask.Flask(__name__)
@@ -33,7 +34,14 @@ def return_coin_values():
 @app.route('/coins/all', methods=['GET'])
 def return_all_coin_values():
     # need to perform a request to the API and then display the result      
-    url = 'http://192.168.0.43:5001/api/coin_data/history/all'
+
+    # Need to read in the REST API host name in as an environment variable
+    try:
+        host = os.environ['API_HOSTNAME']
+    except:
+        host = '192.168.0.43'
+
+    url = 'http://' + host +':5001/api/coin_data/history/all'
     coin_data = requests.get(url)
     coins = coin_data.json()
     coin_objects = []

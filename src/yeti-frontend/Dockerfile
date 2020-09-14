@@ -1,6 +1,6 @@
 FROM python:3
 
-RUN pip install pycoingecko flask requests flask_bootstrap
+RUN pip install pycoingecko flask requests flask_bootstrap gunicorn
 
 ADD /img /img
 ADD /static /static
@@ -10,4 +10,4 @@ ADD yeti_frontend.py yeti_frontend.py
 
 EXPOSE 5002
 
-CMD python3 yeti_frontend.py
+CMD gunicorn -b :5002 yeti_frontend:app

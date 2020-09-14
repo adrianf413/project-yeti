@@ -13,5 +13,7 @@ services:
   frontend:
     build: ./yeti-frontend/
     container_name: yeti_frontend
+    environment:
+     - API_HOSTNAME=192.168.0.43
     ports: 
       - "5002:5002"
