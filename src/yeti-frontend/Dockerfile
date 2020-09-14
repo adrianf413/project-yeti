@@ -1,0 +1,13 @@
+FROM python:3
+
+RUN pip install pycoingecko flask requests
+
+ADD /img /img
+ADD /static /static
+ADD /templates /templates
+ADD coin.py coin.py 
+ADD yeti_frontend.py yeti_frontend,py 
+
+EXPOSE 5002
+
+CMD python3 yeti_frontend.py

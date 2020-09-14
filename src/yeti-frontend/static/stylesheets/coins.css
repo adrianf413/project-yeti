@@ -1,0 +1,14 @@
+body {
+    background-color: white;
+  }
+  h1 {
+    color: rgb(0, 0, 0);
+  }
+  p {
+    color: black;
+    padding: 30px;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+ 
