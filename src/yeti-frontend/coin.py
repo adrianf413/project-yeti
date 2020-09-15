@@ -14,7 +14,8 @@ class Coin:
     def __init__(self, id, price):
         # Creating the attributes of interest for the coins
         self.id = id
-        self.price = price[id]['eur']
+        #self.price = price[id]['eur']
+        self.price = price
         self.timestamp = 0
         self.one_minute_percentage = 0
         self.ten_minute_percentage = 0

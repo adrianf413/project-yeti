@@ -1,0 +1,11 @@
+<html>
+    <head>
+        <title>Coin History</title>
+    </head>
+    <body>
+        <h1>Hi, Yeti user!</h1>
+        {% for coin in coins %}
+        <div><p>{{ coin.id }} price: <b>{{ coin.price }}</b></p></div>
+        {% endfor %}
+    </body>
+</html>
