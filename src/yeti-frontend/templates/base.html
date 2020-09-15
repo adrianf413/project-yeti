@@ -1,0 +1,61 @@
+{% extends 'bootstrap/base.html' %}
+
+
+
+{% block title %}
+    {% if title %}{{ title }} - Yeti{% else %}Project Yeti
+        
+        {% endif %}
+    
+{% endblock %}
+
+{%- block styles %}
+{{ super() }}
+<link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+{% endblock %}
+
+
+{% block navbar %}
+    <html>
+        <style>
+             h1 {
+                background-color: grey;
+                color: black;
+            }
+            small {
+                font-size: smaller;
+                color: black;
+                }
+                ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                
+                }
+        </style>
+        <head>
+            <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico ') }}">
+            <link type="text/css" rel="stylesheet"  href="{{ url_for('static', filename='stylesheets/coins.css') }}">
+        </head>
+        
+            <h1> 
+                <strong>Project Yeti</strong> 
+                <img src="{{ url_for('static', filename='images/yeti_clipart.jpg') }}" alt="logo" width="70"
+                height="70"/>
+
+                <small style="color:darkgray">Cryptocurrency Predictive Buying</small>
+            </h1>
+        
+        
+            <div style = "background-color: lightgrey" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">                
+                <ul class="nav navbar-nav">
+                    <li><a href="/coins/info"">Home</a></li>
+                    <li><a href="/coins/all">History</a></li>
+                </ul>
+            </div>
+        
+        
+    </html>
+{% endblock %}
+
+

@@ -1,0 +1,18 @@
+body {
+    background-color: white;
+  }
+  h1 {
+    background-color: grey;
+    color: black;
+  }
+  p {
+    color: black;
+    padding: 30px;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+  header{
+    background-color: pink;
+  }
+ 

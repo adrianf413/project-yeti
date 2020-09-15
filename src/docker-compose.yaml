@@ -1,0 +1,19 @@
+version: "3.7"
+services: 
+  nginx: 
+    build: ./nginx/ 
+    container_name: nginxtest 
+    ports: 
+      - "80:80"
+  crypto_api:
+    build: ./Cyrpto/
+    container_name: crypto_rAPI
+    ports: 
+      - "5004:5001"
+  frontend:
+    build: ./yeti-frontend/
+    container_name: yeti_frontend
+    environment:
+     - API_HOSTNAME=192.168.0.43
+    ports: 
+      - "5002:5002"
