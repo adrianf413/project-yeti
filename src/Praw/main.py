@@ -106,7 +106,6 @@ def main():
             words = nltk.word_tokenize(top_level_comment)
             # print(words)
 
-            ######### NORMALISATION #########
             # look for coin names
             coin_comment = normalisation.find_coin(words) # pass in the tokenised Reddit comment
 
@@ -114,6 +113,7 @@ def main():
                 # check is list contains anything 
                 coin_name = coin_comment[0]
 
+            ######### NORMALISATION #########
             # remove noun
             words = normalisation.remove_nouns(words) # pass in the tokenised Reddit comment
 

@@ -46,7 +46,7 @@ def main():
 
     # set up the read and write directory
     source_dir = os.path.dirname(os.path.abspath(__file__))
-    textFileName = 'Vulnerability d.pickle'
+    textFileName = 'Sep-03-2020_US federal.pickle'
 
     # Location to write results to
     Classification_results_location = os.path.join(source_dir, "TextFiles", "ClassificationResults")  
@@ -84,7 +84,6 @@ def main():
         # returns a python array list of words
         words = nltk.word_tokenize(top_level_comment)
 
-        ######### NORMALISATION #########
         # look for coin names
         coin_comment = normalisation.find_coin(words) # pass in the tokenised Reddit comment
 
@@ -92,6 +91,8 @@ def main():
             # check is list contains anything 
             coin_name = coin_comment[0]
 
+        ######### NORMALISATION #########
+        
         # remove nouns
         words = normalisation.remove_nouns(words) # pass in the tokenised Reddit comment
 

@@ -9,7 +9,8 @@ from nltk.stem import LancasterStemmer, WordNetLemmatizer  # PorterStemmer
 import nltk
 import contractions
 
-coin_list = ["bitcoin", "btc", "ethereum", "eth", "ether", "tether", "usdt", "ripple", "xrp", "litecoin", "ltc", "binance", "bnb", "bitcoin cash", "bch", "libra"]
+coin_list = ["bitcoin", "btc", "ethereum", "eth", "ether", "eos", "tether", "usdt", "ripple", "xrp", "litecoin", "ltc", 
+"binance", "bnb", "bitcoin-cash", "bch", "libra", "swipe", "sxp", "cardano", "stellar","tron", "cosmos", "dogecoin"]
 
 # these are one time donwloads below
 # nltk.download("stopwords")

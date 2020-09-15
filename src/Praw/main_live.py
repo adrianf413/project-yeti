@@ -12,6 +12,7 @@ It writes to two text files
 
 from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier 
 import Reddit_Comments as Reddit_Comments
+from coin import Coin
 import classify as Classifer
 import contractions
 import normalisation
@@ -22,6 +23,32 @@ from os import sys
 import praw
 import os 
 import yaml
+import json
+
+coin_history_objects = {} # use dicitonary because I want to be able key coins by name
+
+# List of IDs for the 13 coind that we are starting with 
+coin_id_list = ['bitcoin', 'bitcoin-cash', 'ethereum', 'litecoin', 'ripple', 'eos',
+                'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
+                'dogecoin']
+
+def setup_coin_data_file(coin_id_list):
+    
+    for coin in coin_id_list:
+
+        coin_history_objects[coin] = Coin(coin)
+    
+    # https://www.datacamp.com/community/tutorials/python-dictionary-comprehension
+    # {key:value for (key,value) in dictonary.items()}
+    # json_string = json.dumps(for value in dictonary.values())     
+    # json_string = json.dumps([ob.__dict__ for ob in coin_history_objects]) # method id it is a list
+    json_string = json.dumps(list(coin_history_objects.values()))
+    #print(json_string)
+
+    with open("prawdata", 'a', encoding='utf8') as myfile:
+
+        myfile.write(json_string)
+
 
 def main():
 
@@ -41,6 +68,9 @@ def main():
     todays_date = today.strftime("%b-%d-%Y") # Sep-16-2019
     todays_datetime = datetime.now().strftime("%b-%d-%Y %H-%M")
     textFileNameThreads = Classification_results_location + '/' + todays_datetime + "_" + subreddit_name + "_threads.txt"
+
+    # Set up PRAW data on coins
+    setup_coin_data_file(coin_id_list)
     
     with open(textFileNameThreads, 'w', encoding='utf8') as myfile:
         myfile.seek(0)
@@ -159,6 +189,13 @@ def main():
         words = nltk.word_tokenize(top_level_comment)
         # print(words)
 
+        # look for coin names
+        coin_comment = normalisation.find_coin(words) # pass in the tokenised Reddit comment
+
+        if coin_comment:
+            # check is list contains anything 
+            coin_name = coin_comment[0]
+
         ######### NORMALISATION #########
         # remove noun
         words = normalisation.remove_nouns(words) # pass in the tokenised Reddit comment
@@ -192,43 +229,66 @@ def main():
         norm_comment_body = ' '.join(words) # words are a tokenised list, so rejoin as a sentence into comment_body
         is_classifed = False
 
-        sentiment_set[comment_id] = [norm_comment_body, comment.body, submission_id, is_classifed] # comment_body is a normlasied sentence, entry[0] is original comment
+        sentiment_set[comment_id] = [norm_comment_body, comment.body, submission_id, is_classifed, coin_name] # comment_body is a normlasied sentence, entry[0] is original comment
 
         ################## CLASSIFICATION OF COMMENT ##################
 
-        with open(textFileName, 'a', encoding='utf8') as myfile:
+        for key, entry in sentiment_set.items():
+            # find_features for each top level comment in dictionary and classify 
 
-            for key, entry in sentiment_set.items():
-                # find_features for each top level comment in dictionary and classify 
+            if not entry[3]:
+                # check to see if False
 
-                if not entry[3]:
-                    # check to see if False
+                is_classifed = True
+                sentiment_set[key][3] = is_classifed
 
-                    is_classifed = True
-                    sentiment_set[key][3] = is_classifed
+                norm_comment_body = entry[0] 
+                original_comment_body = entry[1].replace("\n", " ") # get rid of the new lines and replace with a space
+                submission_id = entry[2]
+                coin_name = entry[4]
 
-                    norm_comment_body = entry[0] 
-                    original_comment_body = entry[1].replace("\n", " ") # get rid of the new lines and replace with a space
-                    submission_id = entry[2]
+                if not norm_comment_body:
 
-                    if not norm_comment_body:
-                        
-                        print("Normalised comment body: NULL ")
-                        myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + "NORMALISED AS NULL," + "NULL,NULL" + "\n") # \n")
-                        continue                                                        # goes back to top of enclosing loop
-                    else: 
-                        print("Normalised comment body: " + norm_comment_body)           # print normalsied sentence
-
-                    features = Classifer.find_features(norm_comment_body)  # returns a dictionary telling us what out of the 5000 words are present
+                    features = Classifer.find_features(norm_comment_body)  # returns a dictionary telling us what out of the 5000 words are present, may or may not be empty
                     # --> {'film': True, 'one': False, ...}
 
                     classification = Classifer.classify(features)     # classification result
                     confidence = Classifer.confidence(features)       # returns a confidence
+                
+                else:
+                    classification = "NULL"
+                    confidence = "NULL"
+
+                ############## Writing Result To Text File ##############
+                # Commented out for now, don't need to write results to text file
+                '''
+                with open(textFileName, 'a', encoding='utf8') as myfile:
+
+                    if classification == "NULL":
+                        
+                        print("Normalised comment body: NULL ")
+                        myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + "NORMALISED AS NULL," + "NULL,NULL" + "\n") # \n")
+                                                                                        
+                    else: 
+                        print("Normalised comment body: " + norm_comment_body)           # print normalsied sentence
 
                     if classification == 'neg':
                         myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",neg," + str(confidence)  + "\n") #\n")
                     elif classification == 'pos':
                         myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",pos," + str(confidence)  + "\n") # \n")
+                '''
+
+        
+        ################## CLOSE CLASSIFICATION - UPDATE COIN PRAW DATA ##################
+
+
+        with open("prawdata", 'a', encoding='utf8') as myfile:
+
+            coin_history_objects.append(Coin(coin, price))
+
+            json_string = json.dumps([ob.__dict__ for ob in coin_history_objects])
+            #print(json_string)
+            coin_storage.write(json_string)
 
         '''
         choice = input('Press q to quit or Enter to continue: ')
