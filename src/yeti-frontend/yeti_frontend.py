@@ -102,5 +102,6 @@ def return_specific_coin_values():
 
     return flask.render_template('coin.html', coins = coin_objects, display=name)
 
-app.run()
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
 
