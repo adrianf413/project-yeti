@@ -9,6 +9,5 @@ ADD recent_history.py recent_history.py
 ADD crypto_api.py crypto_api.py
 ADD start.sh start.sh
 
-EXPOSE 5001
 
-CMD python3 Application.py & python3 crypto_api.py
+CMD python3 Application.py & gunicorn -b 0.0.0.0:5001 wsgi:app

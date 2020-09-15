@@ -34,5 +34,6 @@ def return_all_coin_values():
     coin_dat = json.load(coin_file)
     return flask.jsonify(coin_dat)
 
-app.run(host='0.0.0.0', port=int(5001))
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=int(5001))
 

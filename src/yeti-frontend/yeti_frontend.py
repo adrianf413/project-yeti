@@ -7,7 +7,7 @@ import os
 from coin import Coin
 
 app = flask.Flask(__name__)
-#app.config["DEBUG"] = True
+app.config["DEBUG"] = True
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 bootstrap = Bootstrap(app)
 

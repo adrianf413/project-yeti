@@ -9,6 +9,5 @@ ADD wsgi.py wsgi.py
 ADD coin.py coin.py 
 ADD yeti_frontend.py yeti_frontend.py 
 
-EXPOSE 5002
 
-CMD gunicorn -b 0.0.0.0:5012 wsgi:app
+CMD gunicorn -b 0.0.0.0:5002 wsgi:app
