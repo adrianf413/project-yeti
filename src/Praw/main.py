@@ -86,10 +86,10 @@ def main():
         todays_date = today.strftime("%b-%d-%Y") # Sep-16-2019
 
         # write the conversation dictionary to a text file
-        Reddit_Comments.write_conv_dict_to_text_file(conversation_dictionary, dictTitle, Conversations_files_location, todays_date) # writes the dictionary as a text file
+        #Reddit_Comments.write_conv_dict_to_text_file(conversation_dictionary, dictTitle, Conversations_files_location, todays_date) # writes the dictionary as a text file
 
         # Pickle the conversation dicitonary 
-        Reddit_Comments.pickle_conv_dict(conversation_dictionary, dictTitle, Conversations_files_location, todays_date) # writes the dictionary as a text file
+        # Reddit_Comments.pickle_conv_dict(conversation_dictionary, dictTitle, Conversations_files_location, todays_date) # writes the dictionary as a text file
 
         ################## NORMALISATION PROCESS ##################
 
@@ -107,6 +107,13 @@ def main():
             # print(words)
 
             ######### NORMALISATION #########
+            # look for coin names
+            coin_comment = normalisation.find_coin(words) # pass in the tokenised Reddit comment
+
+            if coin_comment:
+                # check is list contains anything 
+                coin_name = coin_comment[0]
+
             # remove noun
             words = normalisation.remove_nouns(words) # pass in the tokenised Reddit comment
 
@@ -138,7 +145,7 @@ def main():
 
             norm_comment_body = ' '.join(words) # words are a tokenised list, so rejoin as a sentence into comment_body
 
-            sentiment_set[key] = [norm_comment_body, entry[0], submission_id] # comment_body is a normlasied sentence, entry[0] is original comment
+            sentiment_set[key] = [norm_comment_body, entry[0], submission_id, coin_name] # comment_body is a normlasied sentence, entry[0] is original comment
 
 
         ################## CLASSIFICATION OF COVERSATION DICT ##################
@@ -155,19 +162,19 @@ def main():
 
             # myfile.write('Made in main.py ')
             # myfile.write('\n \n')
-            myfile.write("submission_id, comment_id, original_comment_body, norm_comment_body, classification, confidence\n")
+            myfile.write("submission_id, comment_id, original_comment_body, norm_comment_body, classification, confidence, coin_name\n")
     
             for key, entry in sentiment_set.items():
                 # find_features for each top level comment in dictionary and classify 
 
                 norm_comment_body = entry[0] 
-                original_comment_body = entry[1]
+                original_comment_body = entry[1].replace("\n", " ") # get rid of the new lines and replace with a space
                 submission_id = entry[2]
 
                 if not norm_comment_body:
 
                     print("Normalised comment body: NULL ")
-                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + "NORMALISED AS NULL," + "NULL,NULL" + "\n") # \n")
+                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + "NORMALISED AS NULL," + "NULL,NULL" + "," + coin_name + "\n") # \n")
                     continue                                                    # goes back to top of enclosing loop
                 else: 
                     print("Normalised comment body: " + norm_comment_body)           # print normalsied sentence
@@ -179,10 +186,10 @@ def main():
                 confidence = Classifer.confidence(features)       # returns a confidence
 
                 if classification == 'neg':
-                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",neg," + str(confidence)  + "\n") #\n")
+                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",neg," + str(confidence) + "," + coin_name   + "\n") # \n")
                     score = score - 1
                 elif classification == 'pos':
-                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",pos," + str(confidence)  + "\n") # \n")
+                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",pos," + str(confidence) + "," + coin_name   + "\n") # \n")
                     score = score + 1
 
         print("\n\n Thread Score {}\n".format(score))
