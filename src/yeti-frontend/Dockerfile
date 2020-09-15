@@ -10,4 +10,4 @@ ADD yeti_frontend.py yeti_frontend.py
 
 EXPOSE 5002
 
-CMD gunicorn -b :5002 yeti_frontend:app
+CMD gunicorn -b 0.0.0.0:5012 yeti_frontend:app
