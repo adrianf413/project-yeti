@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<html>
+    
+    <body>
+        <div style="padding-left: 5px;">
+        <h2>CryptoCurrency API</h2>
+        <h4><b>Overview</b></h4>
+        The Cryptocurrency API is a freely available RESTful API built using the CoinGecko API. Written in python, this API can be used to get the recent performance of certain cryptocurrencies.
+            <h5><b>The information for each coin available with the API:</b></h5>
+            <ol>
+                <li>Current Price</li>
+                <li>One Minute Percentage</li>
+                <li>Ten Minute Percentage</li>
+                <li>Thirty Minute Percentage</li>
+                <li>One Hour Percentage</li>
+                <li>Six Hour Percentage</li>
+                <li>Twelve Hour Percentage</li>
+                <li>One Day Percentage</li>
+                <li>One Week Percentage</li>
+                <li>Market Capital</li>
+                <li>24 Hour Volume</li>
+                <li>Timestamp</li>
+            </ol>
+        
+        <h4><b>Example usage</b></h4>
+        There are 2 ways of using the API.
+        <ol>
+            <li>Retreive information for specific Coins</li>
+            <li>Retrieve information for all coins</li>
+        </ol>
+
+        <h5><b>Retreiving information for specific coins</b></h5>
+        Performing the following HTTP request will return a JSON object with the information for the coin specified:
+        <p>
+            <code>
+                http://hostname/api/coin_data/history?name=bitcoin
+            </code>
+        </p>
+        <h5>
+            <b>Retreiving information for all coins</b>
+        </h5>
+        Performing the following HTTP request will return a list of JSON objects for each of the coins:
+        <p>
+            <code>
+                http://hostname/api/coin_data/history/all
+            </code>
+        </p>
+    </div>
+        <h4 style="padding-left: 5px;"><b>Example JSON response</b></h4>
+        <div> 
+            <pre>
+                <code>
+                    {
+                        "currently_bought": false, 
+                        "id": "bitcoin", 
+                        "market_cap": 169518435546.20905, 
+                        "one_day_percentage": 5.121929998044239, 
+                        "one_hour_percentage": 0.01134244364222603, 
+                        "one_minute_percentage": 0.0, 
+                        "one_month_percentage": -11.26111009676698, 
+                        "one_week_percentage": 4.611216249705552, 
+                        "price": 9170.14, 
+                        "six_hour_percentage": 1.4433048994044961, 
+                        "ten_minute_percentage": 0.022578361639902234, 
+                        "thirty_minute_percentage": -0.03433882500173402, 
+                        "timestamp": "15/09/2020  13:41:01", 
+                        "twelve_hour_percentage": 1.7664025071662648, 
+                        "volume": 20368152026.570946
+                    }
+                </code>
+            </pre>
+        
+        </div>
+        <h5  style="padding-left: 5px;"><b>The currently supported coins are:</b></h5>
+            <ol>
+                <li>Bitcoin</li>
+                <li>Bitcoin Cash</li>
+                <li>Ethereum</li>
+                <li>Litecoin</li>
+                <li>Ripple</li>
+                <li>Eos</li>
+                <li>Binance Coin</li>
+                <li>Cardano</li>
+                <li>Tethar</li>
+                <li>Stellar</li>
+                <li>Tron</li>
+                <li>Cosmos</li>
+                <li>Dodgecoin</li>
+            </ol>
+
+
+    </body>
+</html>
+
+{% endblock %}

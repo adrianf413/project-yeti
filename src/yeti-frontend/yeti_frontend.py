@@ -15,6 +15,18 @@ bootstrap = Bootstrap(app)
 def home():
     return flask.render_template('info.html')
 
+@app.route('/coins/praw', methods=['GET'])
+def praw():
+    return flask.render_template('praw.html')
+
+@app.route('/coins/gtsgtb', methods=['GET'])
+def gtsgtb():
+    return flask.render_template('gtsgtb.html')
+
+@app.route('/coins/api_info', methods=['GET'])
+def api_info():
+    return flask.render_template('api_info.html')
+
 @app.route('/coins/mpu', methods=['GET'])
 def return_coin_values():
     if 'name' in request.args:
@@ -103,5 +115,5 @@ def return_specific_coin_values():
     return flask.render_template('coin.html', coins = coin_objects, display=name)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=int(5002))
 

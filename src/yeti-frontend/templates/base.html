@@ -16,11 +16,12 @@
 
 
 {% block navbar %}
-    <html>
+    <html> 
         <style>
              h1 {
                 background-color: grey;
                 color: black;
+                padding-left: 0px;
             }
             small {
                 font-size: smaller;
@@ -34,11 +35,11 @@
                 }
         </style>
         <head>
-            <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico ') }}">
+            <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
             <link type="text/css" rel="stylesheet"  href="{{ url_for('static', filename='stylesheets/coins.css') }}">
         </head>
         
-            <h1> 
+            <h1 style="padding-left: 00px;"> 
                 <strong>Project Yeti</strong> 
                 <img src="{{ url_for('static', filename='images/yeti_clipart.jpg') }}" alt="logo" width="70"
                 height="70"/>
@@ -50,7 +51,10 @@
             <div style = "background-color: lightgrey" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">                
                 <ul class="nav navbar-nav">
                     <li><a href="/coins/info"">Home</a></li>
-                    <li><a href="/coins/all">History</a></li>
+                    <li><a href="/coins/all">Performance History</a></li>
+                    <li><a href="/coins/api_info"">Cryptocurrency API</a></li>
+                    <li><a href="/coins/praw"">Praw</a></li>
+                    <li><a href="/coins/gtsgtb">GTS/GTB</a></li>
                 </ul>
             </div>
         
