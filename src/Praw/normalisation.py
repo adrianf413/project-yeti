@@ -10,7 +10,11 @@ import nltk
 import contractions
 
 coin_list = ["bitcoin", "btc", "ethereum", "eth", "ether", "eos", "tether", "usdt", "ripple", "xrp", "litecoin", "ltc", 
-"binance", "bnb", "bitcoin-cash", "bch", "libra", "swipe", "sxp", "cardano", "stellar","tron", "cosmos", "dogecoin"]
+"binance", "bnb", "bitcoin-cash", "bch", "libra", "swipe", "sxp", "cardano", "stellar","tron", "cosmos", "dogecoin", "doge"]
+
+coin_contractions = {"btc":"bitcoin", "eth":"ethereum", "ether":"ethereum", "usdt":"tether", "xrp":"ripple", "ltc":"litecoin",
+                "bnb":"binance", "bch":"bitcoin-cash", "sxp": "swipe", "ada":"cardano", "xlm":"stellar", "trx":"tron", 
+                "atom":"cosmos", "doge":"dogecoin"}
 
 # these are one time donwloads below
 # nltk.download("stopwords")
@@ -25,7 +29,15 @@ def find_coin(words):
         word = word.lower()
 
         if word in coin_list:      # is the word a coin
-            coin_comment.append(word)
+
+            try:
+                # check to see if word is a contraction
+                fullname = coin_contractions[word]
+                coin_comment.append(fullname)
+            
+            except KeyError:
+                # if we search for non contracted coin word e.g. bitcoin in dictionary, it throws key error, catch and continue
+                coin_comment.append(word)
             
     return coin_comment
 
