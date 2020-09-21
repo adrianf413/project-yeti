@@ -14,7 +14,6 @@ from TextClassifier.ClassifierTraining.classifier_sentiment_training import Vote
 import Reddit_Comments as Reddit_Comments
 from coin import Coin
 import classify as Classifer
-import contractions
 import normalisation
 from datetime import date
 from datetime import datetime
@@ -30,19 +29,15 @@ coin_praw_objects = []
 # List of IDs for the 13 coins that we are starting with 
 coin_id_list = ['bitcoin', 'bitcoin-cash', 'ethereum', 'litecoin', 'ripple', 'eos',
                 'binancecoin', 'cardano', 'tether', 'stellar','tron', 'cosmos', 
-                'dogecoin']
+                'dogecoin', 'libra', 'swipe']
 
 def setup_coin_data_file(coin_id_list, jsonFileLocation):
     
     for coin in coin_id_list:
 
         coin_praw_objects.append(Coin(coin))
-    
-    # https://www.datacamp.com/community/tutorials/python-dictionary-comprehension
-    # {key:value for (key,value) in dictonary.items()}
-    # json_string = json.dumps(for value in dictonary.values())     
+     
     json_string = json.dumps([ob.__dict__ for ob in coin_praw_objects]) # method id it is a list
-    # json_string = json.dumps(list(coin_praw_objects.values()))
     #print(json_string)
 
     with open(jsonFileLocation, 'w', encoding='utf8') as myfile:
@@ -61,7 +56,7 @@ def set_up_dataset_recording(textFileNameThreads, textFileName):
         myfile.seek(0)
 
         #myfile.write('Made in scean_script_application_live.py ')
-        myfile.write("submission_id, comment_id, original_comment_body, norm_comment_body, classification, confidence\n")
+        myfile.write("submission_id, comment_id, original_comment_body, norm_comment_body, classification, confidence, coin_name\n")
         #myfile.write('\n \n')
 
 def main():
@@ -127,7 +122,7 @@ def main():
 
     if praw_list != None:
 
-        print("signing in")
+        print("LOGGING:\t signing in")
 
         reddit = praw.Reddit(client_id=client_id_conf,
                             client_secret=client_secret_conf,
@@ -145,25 +140,35 @@ def main():
     for comment in crypto_subreddit.stream.comments():
         try:
             print(30*'_')
+            is_top_level = False
 
-            # API call to get the parent ID
-            parent_id = comment.parent_id
+            parent_id = comment.parent_id # API call to get the parent ID - we do't know if it's a comment or submission id yet 
+            comment_id = comment.id
 
-            # print('ID is {}'.format(parent_id)) # no need to print ID anymore, was to see if comment was top level or reply to top level
-
-            # if prefix is t3, then the 'parent' is a subreddit thread
+            # if prefix of parent_id is t3, then the 'parent' is a subreddit thread
             if parent_id[:2] == 't3':
 
-                # make sure comment not already in dictionary
-                if comment.id in sentiment_set:
-                    print("top level comment already in sentiment_set")
+                if comment_id in sentiment_set:
+                    # make sure comment not already in dictionary
+                    print("LOGGING:\t top level comment already in sentiment_set")
                     continue
+
+                is_top_level = True
 
                 # print('Prefix of parent_id is t3, therefore parent is submission/thread object')
 
-                print('Belongs to Submission title: {}\n' .format(comment.submission.title)) # There are different submissions in the same subreddit
+                print('LOGGING:\t Belongs to Submission title: {}\n' .format(comment.submission.title)) # There are different submissions in the same subreddit
+                
+                # retrieve some details about the submission
                 submission_id = parent_id
-                comment_id = comment.id
+                # submission_num_comments = comment.submission.num_comments
+                submission_link_flair_text = comment.submission.link_flair_text
+                submission_upvotes = comment.submission.score
+                #submission_upvote_ratio = comment.submission.upvote_ratio
+
+                if not submission_link_flair_text:
+                    # print("LOGGING:\t submission flair "+ submission_link_flair_text)
+                    submission_link_flair_text = "NULL"
 
                 # add thread submission id and title to our dictionary 
                 if submission_id not in threads_names:
@@ -171,21 +176,35 @@ def main():
 
                     with open(textFileNameThreads, 'a', encoding='utf8') as myfile:
 
-                        myfile.write("" + submission_id + "," + threads_names[submission_id] + "\n")
+                        myfile.write("" + submission_id + "," + threads_names[submission_id] + "," + str(submission_upvotes) + "," + submission_link_flair_text + "\n")
 
                 
-            # else if prefix is t1, then the 'parent' is a comment
+            # else if prefix of parent is t1, then this is a reply comment
             elif parent_id[:2] == 't1':
                 # print("Prefix of parent_id is t1, therefore the comment's parent is a comment object\n")
 
-                continue
+                if parent_id in sentiment_set:
+                    # check if parent comment of this reply is in sentiment set
+                    # if it is, add it, this was we now ONLY have top level comments & comments sub top level 
 
+                    if comment_id in sentiment_set:
+                        # make sure comment not already in dictionary
+                        print("LOGGING:\t reply level comment already in sentiment_set")
+                        continue
+
+
+                    print('LOGGING:\t Reply comment belongs to comment id : {}\n' .format(parent_id)) # There are different submissions in the same subreddit
+                    # print('LOGGING:\t Belongs to Submission title: {}\n' .format(comment.submission.title)) # There are different submissions in the same subreddit
+                
+
+                # details about this reply comment's parent
                 # parentComment = reddit.comment(parent_id[3:]) # find original parent comment
-                #print('Belongs to Submission title: {}\n' .format(parentComment.submission.title))
-                #print('\nParent Comment:')
-                #print('{}\n'.format(parentComment.body))     # print the parent comment body
+                # print('Belongs to Submission title: {}\n' .format(parentComment.submission.title))
+                # print('\nParent Comment:')
+                # print('{}\n'.format(parentComment.body))     # print the parent comment body
 
-            print('__Comment__:')
+
+            print('__Comment Under Analysis__:')
             print('{}\n' .format(comment.body))
 
          # close the try statement for streaming comments 
@@ -195,13 +214,14 @@ def main():
             continue
             # pass
 
+
         ################## NORMALISATION PROCESS ##################
 
         top_level_comment = normalisation.replace_contractions(comment.body)
         coin_name = "NULL"
 
         if "I am a bot" in top_level_comment:
-            print("Ignore bot comment")
+            print("LOGGING:\t Ignore bot comment")
             continue
             # make sure coment is not a bot moderator 
 
@@ -211,13 +231,14 @@ def main():
         # print(words)
 
         # look for coin names
-        coin_comment = normalisation.find_coin(words) # pass in the tokenised Reddit comment
+        coin_comment = normalisation.find_coin(words)               # pass in the tokenised Reddit comment
 
         if coin_comment:
             # check is list contains anything 
-            coin_name = coin_comment[0]
+            mode_coin= max(coin_comment, key=coin_comment.count)   # get mode of coin names found - note it has quadratic run time but small list anyway
         else:
             # if the normalised comment doesn't mention a coin just continue
+            print("LOGGING:\t No Coin mentioned in comment, continue and retrieve new comment")
             continue
 
         ######### NORMALISATION #########
@@ -250,28 +271,39 @@ def main():
 
         # process_sent_content(tokenisedSent) # method is meant to identify NOUN and ADJ but I never used it
 
-        norm_comment_body = ' '.join(words) # words are a tokenised list, so rejoin as a sentence into comment_body
+        if words:
+            # if tokenised list contains words, rejoin as a sentence into comment_body
+            norm_comment_body = ' '.join(words) 
+        else:
+            norm_comment_body = "" # else leave norm_comment_body empty, a blank string e.g. "" is falsy
+        
         is_classifed = False
 
-        sentiment_set[comment_id] = [norm_comment_body, comment.body, submission_id, is_classifed, coin_name] # comment_body is a normlasied sentence, entry[0] is original comment
+        # boolean is_top_level could be added to sentiment_set
+        sentiment_set[comment_id] = [norm_comment_body, comment.body, submission_id, is_classifed, mode_coin] # comment_body is a normlasied sentence, entry[0] is original comment
 
         ################## CLASSIFICATION OF COMMENT ##################
 
         for key, entry in sentiment_set.items():
             # find_features for each top level comment in dictionary and classify 
+            print("LOGGING:\t start of sentiment_set loop") 
+
+            norm_comment_body = entry[0]
+            original_comment_body = entry[1].replace("\n", " ") # get rid of the new lines and replace with a space
+            submission_id = entry[2]
+            coin_name = entry[4]
 
             if not entry[3]:
-                # check to see if False
+                # if is_classified is Flase, continue
 
-                is_classifed = True
+                is_classifed = True                     # is_classified morfe represent is_analysed, norm_comment_body may be null
                 sentiment_set[key][3] = is_classifed
 
-                norm_comment_body = entry[0] 
-                original_comment_body = entry[1].replace("\n", " ") # get rid of the new lines and replace with a space
-                submission_id = entry[2]
-                coin_name = entry[4]
+                if norm_comment_body:
+                    # check to if the normalised comment has retained any words - no point analysing comment if empty
 
-                if not norm_comment_body:
+                    #if coin_name != "NULL":
+                        # was gonna put this in but if normalisation.find_coin comes up empty handed the comment is skipped anyway
 
                     features = Classifer.find_features(norm_comment_body)  # returns a dictionary telling us what out of the 5000 words are present, may or may not be empty
                     # --> {'film': True, 'one': False, ...}
@@ -283,34 +315,43 @@ def main():
                     coin_praw_objects[index_in_list].update_sentiment(classification, confidence) # update the coin praw object attirbute
 
                     has_coin_update = True
-                
+                                    
                 else:
+                    # norm_comment_body empty so we can't classify it
+                    print("LOGGING:\t norm_comment_body is empty") 
                     classification = "NULL"
                     confidence = "NULL"
 
-                ############## Writing Result To Text File ##############
-                # Commented out for now, don't need to write results to text file
-                '''
-                with open(textFileName, 'a', encoding='utf8') as myfile:
+            else:
+                # has already been classified -  continue and don't write to text file
+                print("LOGGING:\t normalised comment has already been classified") 
+                continue 
 
-                    if classification == "NULL":
-                        
-                        print("Normalised comment body: NULL ")
-                        myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + "NORMALISED AS NULL," + "NULL,NULL" + "\n") # \n")
-                                                                                        
-                    else: 
-                        print("Normalised comment body: " + norm_comment_body)           # print normalsied sentence
+            ############## Writing Result To Text File ##############
+            
+            with open(textFileNameResults, 'a', encoding='utf8') as myfile:
 
-                    if classification == 'neg':
-                        myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",neg," + str(confidence)  + "\n") #\n")
-                    elif classification == 'pos':
-                        myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",pos," + str(confidence)  + "\n") # \n")
-                '''
+                print("LOGGING:\t writing to text file") 
+
+                if classification == "NULL":
+                    
+                    print("Normalised comment body: NULL ")
+                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + "NORMALISED AS NULL," + "NULL,NULL" + "\n") # \n")
+                                                                                    
+                else: 
+                    print("Normalised comment body: " + norm_comment_body)           # print normalsied sentence
+
+                if classification == 'neg':
+                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",neg," + str(confidence) + "," + coin_name + "\n") #\n")
+                elif classification == 'pos':
+                    myfile.write(submission_id + "," + key + ",'" + original_comment_body + "'," + norm_comment_body + ",pos," + str(confidence) + "," + coin_name + "\n") # \n")
 
         
         ################## CLOSE CLASSIFICATION - UPDATE COIN PRAW DATA ##################
 
         if has_coin_update:
+
+            print("LOGGING:\t has coin update, continue")
 
             with open(jsonFileLocation, 'w', encoding='utf8') as myfile:
                 
@@ -323,7 +364,7 @@ def main():
             has_coin_update = False
         
         else:
-            print("LOGGING No coin update, continue")
+            print("LOGGING:\t No coin update, continue")
 
 
         '''

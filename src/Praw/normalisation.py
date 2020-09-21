@@ -10,10 +10,10 @@ import nltk
 import contractions
 
 coin_list = ["bitcoin", "btc", "ethereum", "eth", "ether", "eos", "tether", "usdt", "ripple", "xrp", "litecoin", "ltc", 
-"binance", "bnb", "bitcoin-cash", "bch", "libra", "swipe", "sxp", "cardano", "stellar","tron", "cosmos", "dogecoin", "doge"]
+"binancecoin", "binance", "bnb", "bitcoin-cash", "bch", "bcash", "libra", "swipe", "sxp", "cardano", "stellar","tron", "cosmos", "dogecoin", "doge"]
 
 coin_contractions = {"btc":"bitcoin", "eth":"ethereum", "ether":"ethereum", "usdt":"tether", "xrp":"ripple", "ltc":"litecoin",
-                "bnb":"binance", "bch":"bitcoin-cash", "sxp": "swipe", "ada":"cardano", "xlm":"stellar", "trx":"tron", 
+                "bnb":"binancecoin", "binance":"binancecoin", "bch":"bitcoin-cash", "bcash":"bitcoin-cash", "sxp": "swipe", "ada":"cardano", "xlm":"stellar", "trx":"tron", 
                 "atom":"cosmos", "doge":"dogecoin"}
 
 # these are one time donwloads below
@@ -31,7 +31,7 @@ def find_coin(words):
         if word in coin_list:      # is the word a coin
 
             try:
-                # check to see if word is a contraction
+                # check to see if word is a contraction in coin_contractions
                 fullname = coin_contractions[word]
                 coin_comment.append(fullname)
             
