@@ -10,7 +10,8 @@ It writes to two text files
  b. all submission theads IDs and title
 '''
 
-from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier 
+#from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier 
+from TextClassifier.VoteClassifier import VoteClassifier 
 import Reddit_Comments as Reddit_Comments
 from coin import Coin
 import classify as Classifer
@@ -144,6 +145,7 @@ def main():
 
             parent_id = comment.parent_id # API call to get the parent ID - we do't know if it's a comment or submission id yet 
             comment_id = comment.id
+            submission_id = "blank"
 
             # if prefix of parent_id is t3, then the 'parent' is a subreddit thread
             if parent_id[:2] == 't3':
@@ -187,6 +189,8 @@ def main():
                     # check if parent comment of this reply is in sentiment set
                     # if it is, add it, this was we now ONLY have top level comments & comments sub top level 
 
+                    submission_id = comment.link_id # submission id which comment belongs to 
+
                     if comment_id in sentiment_set:
                         # make sure comment not already in dictionary
                         print("LOGGING:\t reply level comment already in sentiment_set")
@@ -196,6 +200,9 @@ def main():
                     print('LOGGING:\t Reply comment belongs to comment id : {}\n' .format(parent_id)) # There are different submissions in the same subreddit
                     # print('LOGGING:\t Belongs to Submission title: {}\n' .format(comment.submission.title)) # There are different submissions in the same subreddit
                 
+                else:
+                    # if comment's parent not in sentiment set continue
+                    continue
 
                 # details about this reply comment's parent
                 # parentComment = reddit.comment(parent_id[3:]) # find original parent comment
