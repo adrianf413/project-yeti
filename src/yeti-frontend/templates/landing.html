@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<html>
+    <style>
+    body{
+    
+    padding-left: 0px;
+    
+    }
+    
+    </style>
+    <body>
+        <h1 style="font-size: 60px; text-align: center;"> 
+            Project Yeti 
+            <img src="{{ url_for('static', filename='images/yeti_clipart.jpg') }}"  style="float: center;" alt="logo" width="300"
+            height="300"/></a>
+        </h1> 
+        
+    </body>
+</html>
+
+{% endblock %}

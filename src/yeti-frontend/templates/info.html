@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block app_content %}
 
 <html>
     <style>
@@ -9,39 +9,55 @@
     padding-left: 0px;
     
     }
+
+    .infopad {
+        padding-left: 3px;
+    }
+    
     
     </style>
-    <body>
+    <body >
         <h2>Introduction</h2> 
-        This is Project Yeti, the joined efforts of Adrian Forde and Sean Harkin
-        to create CCPB (CryptoCurrencyPredictiveBuying). 
+        <div class="infopad">
+            This is Project Yeti, the joined efforts of Adrian Forde and Sean Harkin
+            to create CCPB (CryptoCurrencyPredictiveBuying). 
+        </div>
         
         <h3>Overview</h3>
-        With this project we will use coinGecko API to download real 
-        historical cryptocurrency data and this, in conjuction with data from Reddit, 
-        will be analyzed and 
-        attempt to create a trading algorithm that will buy and sell crypto currencies at the correct time.
-    
-        <div>There are 3 parts to this project:</div>
+
+        <div class="infopad">
+            With this project we will use coinGecko API to download real 
+            historical cryptocurrency data and this, in conjuction with data from Reddit, 
+            will be analyzed and 
+            attempt to create a trading algorithm that will buy and sell crypto currencies at the correct time.
+        </div>
+        <div class="infopad" style="text-decoration-line: underline;">
+            There are 3 parts to this project:
+        </div>
         <ol>
             <li>Coin data service</li>
             <li>Reddit data service</li>
             <li>GTS/GTB</li>
         </ol>
-            The coin data and reddit data parts are exposed to the third part 
+            
+        <div class="infopad">The coin data and reddit data parts are exposed to the third part 
             (GTS/BTG) as RESTful endpoints which can be queried at any time. 
             All three parts are decoupled.
-        
+        </div>
+
         <h3>CoinGecko API</h3>
-        This project uses the free coin gecko API to retreive information for the crypto currency
+        <div class="infopad">
+            This project uses the free coin gecko API to retreive information for the crypto currency
+        </div>
         
         <h3>PRAW - Python Reddit API Wrapper</h3>
-        This project uses PRAW to scrape reddit and monitor some crypto subreddits
-
+        <div class="infopad">
+            This project uses PRAW to scrape reddit and monitor some crypto subreddits
+        </div>
         <h2>Creators</h2>
         
             
-        <div>
+        <div class="infopad">
             <h3>Adrian Forde</h3>
             <p>
                 <img src="{{ url_for('static', filename='images/adrian_new.jpg') }}"   alt="profile" width="180"
@@ -56,17 +72,18 @@
         </div>
         
             
-        <div> 
+        <div class="infopad">
             <h2>Sean Harkin</h2>
             <p>
                 <img src="{{ url_for('static', filename='images/sean.jpg') }}" alt="profile" width="180"
                 height="190"/>
             </p>
             <p>
-                Sean is a big smelly dirtbird fron Beart.
+                Man of few words from Beart, Co Donegal.
             </p>
         </div>
     </body>
 </html>
 
 {% endblock %}
+

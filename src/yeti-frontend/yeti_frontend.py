@@ -11,6 +11,11 @@ app.config["DEBUG"] = True
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 bootstrap = Bootstrap(app)
 
+
+@app.route('/', methods=['GET'])
+def landing():
+    return flask.render_template('landing.html')
+
 @app.route('/coins/info', methods=['GET'])
 def home():
     return flask.render_template('info.html')
@@ -32,9 +37,6 @@ def return_coin_values():
     if 'name' in request.args:
         name = request.args['name']
         
-        #coin_file = open("12hourstorage.json", 'r')
-        #coin_dat = json.load(coin_file)
-        #loaded_json  = json.load(coin_file)
         for x in coin_dat:
             coin_id = x['id']
             #print(name)

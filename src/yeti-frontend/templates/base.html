@@ -1,7 +1,5 @@
 {% extends 'bootstrap/base.html' %}
 
-
-
 {% block title %}
     {% if title %}{{ title }} - Yeti{% else %}Project Yeti
         
@@ -10,56 +8,185 @@
 {% endblock %}
 
 {%- block styles %}
-{{ super() }}
-<link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    {{ super() }}
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 {% endblock %}
 
 
+
 {% block navbar %}
-    <html> 
+    
         <style>
+            
              h1 {
                 background-color: grey;
                 color: black;
                 padding-left: 0px;
+                padding-bottom: 0px;
+                padding-top: 0px;
+                padding-right: 0px;
             }
             small {
                 font-size: smaller;
-                color: black;
-                }
-                ul {
+                color: black;    
+            }
+            ul {
                 list-style-type: none;
+
                 margin: 0;
                 padding: 0;
-                
+                overflow: hidden;
+            }
+
+            li a {
+                border-bottom: black;
+                display: block;
+            }
+
+            .topnav {
+                overflow: hidden;
+                background-color:lightgray;
+                float: right;
+                padding-right: 0px;
+            }
+
+            .topnav a {
+                float: left;
+                display: block;
+                color: gray;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+
+            .topnav a:hover {
+                background-color: #ddd;
+                color: black;
+            }
+
+            .topnav a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .topnav .icon {
+                display: none;
+            }
+
+            .container {
+                border: black;
+                display: block;
+            }
+
+            .container:before,
+            .container:after {
+                content: "";
+                display: table;
+            }
+
+            .container:after {
+                clear: both;
+            }
+            
+            @media screen and (max-width: 770px) {
+
+                .container .topnav a {
+                    display: none;
+                    float: right;
                 }
+
+                .container .topnav a.icon {
+                    float: right;
+                    display: block;
+                    size: 17px;
+                }
+            }
+
+            @media screen and (max-width: 770px) {
+
+                
+
+                .container .topnav.responsive {
+                    position: relative;
+                    float: none;
+                    
+                }
+
+                .container .topnav.responsive .icon {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                }
+
+                .container .topnav.responsive a {
+                    float: none;
+                    display: block;
+                    text-align: middle;
+                    border-bottom: 1px solid darkgray;
+                }
+            }
+
         </style>
+
         <head>
             <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-            <link type="text/css" rel="stylesheet"  href="{{ url_for('static', filename='stylesheets/coins.css') }}">
+            <link type="text/css" rel="stylesheet"  href="{{ url_for('static', filename='stylesheets/bass.css') }}">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         </head>
-        
-            <h1 style="padding-left: 00px;"> 
-                <strong>Project Yeti</strong> 
-                <img src="{{ url_for('static', filename='images/yeti_clipart.jpg') }}" alt="logo" width="70"
-                height="70"/>
 
-                <small style="color:darkgray">Cryptocurrency Predictive Buying</small>
-            </h1>
-        
-        
-            <div style = "background-color: lightgrey" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">                
-                <ul class="nav navbar-nav">
-                    <li><a href="/coins/info"">Home</a></li>
-                    <li><a href="/coins/all">Performance History</a></li>
-                    <li><a href="/coins/api_info"">Cryptocurrency API</a></li>
-                    <li><a href="/coins/praw"">Praw</a></li>
-                    <li><a href="/coins/gtsgtb">GTS/GTB</a></li>
-                </ul>
+        <header style=" background-color: lightgrey;">
+            <div>
+                <h1> 
+                    <a href="/" style="text-decoration: none; text-shadow: none; color: black ;"><strong>Project Yeti</strong>
+                    <img src="{{ url_for('static', filename='images/yeti_clipart.jpg') }}" alt="logo" width="70"
+                    height="70"/></a>
+
+                    <small style="color:darkgray">Cryptocurrency Predictive Buying</small>
+                </h1>
             </div>
+             
+            <div class="container">
+                <div class= "topnav" id="myTopnav" >
+                    <a href="/coins/info"">About</a>
+                    <a href="/coins/all">Performance History</a>
+                    <a href="/coins/api_info"">Cryptocurrency API</a>
+                    <a href="/coins/praw"">Praw</a>
+                    <a href="/coins/gtsgtb">GTS/GTB</a>
+                    <a href="javascript:void(0);" class="icon" onclick="hideNavBar()"><i class="fa fa-bars"></i></a>
+                </div>
+            </div>
+            <div></div>
+            
+            
+            <script>
+                function hideNavBar() {
+                  var x = document.getElementById("myTopnav");
+                  if (x.className === "topnav") {
+                    x.className += " responsive";
+                  } else {
+                    x.className = "topnav";
+                  }
+                }
+                </script>
+        </header>
         
-        
-    </html>
+        {% block app_content %} {% endblock %}
+
+        {% block footer %}
+        {% include "footer.html" %}
+        {% endblock %}
+
 {% endblock %}
+
+
+
+
+
+            
+
+
+
+
 
 

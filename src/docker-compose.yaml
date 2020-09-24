@@ -9,7 +9,7 @@ services:
     build: ./Cyrpto/
     container_name: crypto_rAPI
     ports: 
-      - "5004:5001"
+      - "5001:5001"
   frontend:
     build: ./yeti-frontend/
     container_name: yeti_frontend
