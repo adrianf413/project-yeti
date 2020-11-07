@@ -11,7 +11,7 @@ conversationDictList --> = [{submission.title: conversationDict}, ...]
     
 '''
 
-from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier 
+from TextClassifier.VoteClassifier import VoteClassifier 
 import Reddit_Comments as Reddit_Comments
 import classify as Classifer
 import contractions

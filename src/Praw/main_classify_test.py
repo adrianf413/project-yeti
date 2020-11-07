@@ -9,7 +9,7 @@ conversationDictList --> = [{submission.title: conv_dict}, ...]
     
 '''
 
-from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier 
+from TextClassifier.VoteClassifier import VoteClassifier 
 import classify as Classifer
 import contractions
 import normalisation

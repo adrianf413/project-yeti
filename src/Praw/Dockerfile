@@ -1,6 +1,7 @@
-FROM python:3
+FROM python:3.7.9
 
 RUN pip install nltk flask praw PyYAML contractions Unidecode regex inflect
+RUN pip install -U scikit-learn==0.22.2.post1
 
 ADD __init__.py __init__.py
 ADD main_live.py main_live.py
@@ -10,6 +11,7 @@ ADD classify.py classify.py
 ADD coin.py coin.py
 ADD configuration.yaml configuration.yaml 
 ADD api_praw.py api_praw.py
+ADD TextClassifier/VoteClassifier.py TextClassifier/VoteClassifier.py
 COPY TextClassifier/Classifiers TextClassifier/Classifiers
 
 RUN python -m nltk.downloader stopwords

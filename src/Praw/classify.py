@@ -9,7 +9,7 @@ The module does the following does the following
  2. 
 '''
 
-from TextClassifier.ClassifierTraining.classifier_sentiment_training import VoteClassifier
+from TextClassifier.VoteClassifier import VoteClassifier 
 import os
 import pickle
 import sys
@@ -27,7 +27,7 @@ word_features_f.close()
 
 # open the pickled voted_classifier file
 Classifier_read_location = os.path.join(source_dir, "TextClassifier", "Classifiers") 
-file_name = "voted_classifier.pickle" 
+file_name = "Voted_Classifier.pickle" 
 voited_classifier_f = open(os.path.join(Classifier_read_location, file_name), "rb")
 voited_classifier = pickle.load(voited_classifier_f) 
 voited_classifier_f.close()
